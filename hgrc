@@ -1,0 +1,18 @@
+[ui]
+username = Parker DeBardelaben <parker@mailchimp.com>
+
+[extensions]
+mq = 
+rebase =
+
+[alias]
+aa = add
+br = bookmark
+ca = !hg add && hg commit $@
+ci = commit
+co = update -r $1
+lg = !hg log -f -l 10 --template '{rev}:{node|short} - {author|person}, {date|age}: {desc|firstline}\n' | sort -n
+mg = merge
+re = rebase
+up = !hg pull --rebase
+push = push --rev .

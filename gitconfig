@@ -1,0 +1,29 @@
+[user]
+name = Parker DeBardelaben
+email = pdebardelaben@gmail.com
+
+[core]
+excludesfile = /home/pdebardelaben/.gitignore
+
+[color]
+ui = true
+diff = auto
+stats = auto
+branch = auto
+interactive = auto
+
+[alias]
+aa = add --all
+br = branch
+ca = commit --amend
+ci = commit
+co = checkout
+fe = fetch
+in = !git fetch && git lg master..origin/master
+lg = log --pretty=format:'%h - %an, %ar: %s' --reverse -10
+mg = merge
+ms = merge --squash
+out = !git fetch && git lg origin/master..master
+re = rebase
+st = status
+up = pull
