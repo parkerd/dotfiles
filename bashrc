@@ -39,6 +39,7 @@ fi
 # alias
 alias b='bundle'
 alias be='bundle exec'
+alias blog='middleman'
 alias c='clear'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
 alias l='ls'
