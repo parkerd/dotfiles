@@ -99,5 +99,7 @@ if [ -f ~/.dayjob ]; then
 fi
 
 # reset terminal
-cd
-clear
+if [ "$TERM" != "dumb" ]; then
+  cd
+  clear
+fi
