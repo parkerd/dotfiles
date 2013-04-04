@@ -59,12 +59,12 @@ ssh-copy-id() {
   cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
 }
 
-# create .rvmrc
+# create .ruby-version and .ruby-gemset
 rvmrc() {
   if [ "$1" == "help" ]; then
-    echo 'usage: rvmrc <version> [<gemset>]'
-  elif [ -f .rvmrc ]; then
-    echo 'error: .rvmrc already exists'
+    echo 'usage: rvmrc [version] [gemset]'
+  elif [ -f .ruby-version -o -f .ruby-gemset ]; then
+    echo 'rvm config already exists'
   else
     if [ -z $1 ]; then
       ruby=$(rvm list | grep ^= | awk '{print $2}')
@@ -76,11 +76,14 @@ rvmrc() {
     else
       gemset=$2
     fi
-    rvm rvmrc create $ruby@$gemset
-    rvm rvmrc trust > /dev/null
+    #rvm rvmrc create $ruby@$gemset
+    #rvm rvmrc trust > /dev/null
+    echo "creating rvm config"
+    echo $ruby > .ruby-version
+    echo $gemset > .ruby-gemset
     cd .
-    rvm current
   fi
+  rvm current
 }
 
 # json api
