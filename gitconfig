@@ -27,3 +27,6 @@ out = !git fetch && git lg origin/master..master
 re = rebase
 st = status
 up = pull
+
+[push]
+default = simple
