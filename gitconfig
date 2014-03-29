@@ -29,6 +29,7 @@ pop = stash pop
 re = rebase
 rollback = reset HEAD^
 st = status
+sub = submodule
 up = pull
 
 [push]

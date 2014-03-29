@@ -10,6 +10,7 @@ set pastetoggle=<F2>
 map <leader>r :NERDTreeToggle<CR>
 map <leader>f :CtrlP<CR>
 map <leader>t :!rspec<CR>
+nmap <space> zz
 
 " commands
 command W :w %
