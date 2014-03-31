@@ -9,7 +9,6 @@ inoremap kk <Esc>
 set pastetoggle=<F2>
 map <leader>r :NERDTreeToggle<CR>
 map <leader>f :CtrlP<CR>
-map <leader>t :!rspec<CR>
 nmap <space> zz
 
 " commands
@@ -17,7 +16,7 @@ command W :w %
 command WW :w !sudo tee % >/dev/null
 
 " general settings
-colorscheme slate
+colorscheme gardener
 set encoding=utf-8
 set nocompatible
 set nobackup
@@ -27,6 +26,8 @@ set noswapfile
 syntax on
 set number
 set showmatch
+let w:m1=matchadd('NonText', '\%<81v.\%>77v', -1)
+let w:m2=matchadd('Cursor', '\%>80v.\+', -1)
 
 " tab settings
 set tabstop=8
