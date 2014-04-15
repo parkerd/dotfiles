@@ -21,7 +21,7 @@ co = !git stash -u >/dev/null && git checkout $@ && git stash list && echo >/dev
 df = !git diff head
 fe = fetch
 in = !git fetch && git lg master..origin/master
-lg = log --pretty=format:'%h - %an, %ar: %s' --reverse -10
+lg = !git log --pretty=format:'%h - %an, %ar: %s' --reverse -10 | cat
 mg = merge
 ms = merge --squash
 out = !git fetch && git lg origin/master..master

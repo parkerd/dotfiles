@@ -2,8 +2,10 @@
 username = Parker DeBardelaben <parker@mailchimp.com>
 
 [extensions]
+churn =
 mq = 
 rebase =
+shelve =
 
 [alias]
 aa = add

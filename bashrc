@@ -14,11 +14,10 @@ export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 export PATH=/usr/local/bin:$PATH
 export VISUAL=vi
 
-export GO_SRC=github.com/parkerd
+export GITHUB=github.com/parkerd
 export PROJECTS=~/projects
 export SUBPROJECTS=( go rq rsg )
 export DOTFILES=$PROJECTS/dotfiles
-
 
 # prompt
 if [ $(id -u) -eq 0 ]; then
