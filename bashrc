@@ -3,7 +3,7 @@ if [ -f ~/.profile ]; then
   source ~/.profile
 fi
 
-# root
+# alias
 alias root='sudo bash --rcfile ~/.bashrc'
 
 # prompt

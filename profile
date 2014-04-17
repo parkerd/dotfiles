@@ -39,9 +39,9 @@ if which pyenv &> /dev/null; then
 fi
 
 # rvm
-#if [ -s "$HOME/.rvm/scripts/rvm" ]; then
-#  source "$HOME/.rvm/scripts/rvm"
-#fi
+if [ -s "~/.rvm/scripts/rvm" ]; then
+  source ~/.rvm/scripts/rvm
+fi
 
 # alias
 alias b='bundle'

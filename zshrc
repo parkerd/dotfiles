@@ -3,7 +3,8 @@ if [ -f ~/.profile ]; then
   source ~/.profile
 fi
 
-# root
+# alias
+alias rake='noglob rake'
 alias root='sudo zsh'
 
 # prompt
