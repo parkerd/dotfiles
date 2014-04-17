@@ -34,7 +34,7 @@ if [ -d "/usr/local/opt/php53" ]; then
 fi
 
 # pyenv
-if which pyenv > /dev/null; then
+if which pyenv &> /dev/null; then
   eval "$(pyenv init -)"
 fi
 
