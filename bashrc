@@ -3,6 +3,9 @@ if [ -f ~/.profile ]; then
   source ~/.profile
 fi
 
+# root
+alias root='sudo bash --rcfile ~/.bashrc'
+
 # prompt
 if [ $(id -u) -eq 0 ]; then
   PS1_COLOR='\[\e[1;31m\]'
@@ -16,8 +19,4 @@ else
   else
     export PS1=$PS1_COLOR$MC_HOSTNAME' \w \$ \[\e[0m\]'
   fi
-fi
-
-if [ -d $PROJECTS/project_prompt ]; then
-  source $PROJECTS/project_prompt/project_prompt.sh
 fi

@@ -39,9 +39,9 @@ if which pyenv &> /dev/null; then
 fi
 
 # rvm
-if [ -s "$HOME/.rvm/scripts/rvm" ]; then
-  source "$HOME/.rvm/scripts/rvm"
-fi
+#if [ -s "$HOME/.rvm/scripts/rvm" ]; then
+#  source "$HOME/.rvm/scripts/rvm"
+#fi
 
 # alias
 alias b='bundle'
@@ -57,7 +57,6 @@ alias irb='irb --simple-prompt'
 alias pvm='pyenv'
 alias r='clear && rake'
 alias redis='redis-server /usr/local/etc/redis.conf'
-alias root='sudo bash --rcfile ~/.bashrc'
 alias sum='paste -sd+ - | bc'
 alias t='clear && rspec'
 alias tm='tmux'
@@ -128,8 +127,8 @@ fi
 
 # reset terminal
 #if [ "$TERM" != "dumb" ]; then
-#  cd
-#  clear
+  #cd
+  #clear
 #fi
 
 if [ -d $PROJECTS/project_prompt ]; then
