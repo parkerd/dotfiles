@@ -3,6 +3,7 @@ username = Parker DeBardelaben <parker@mailchimp.com>
 
 [extensions]
 churn =
+color =
 mq = 
 rebase =
 shelve =
