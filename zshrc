@@ -1,8 +1,9 @@
+# zshrc
 # alias
 alias rake='noglob rake'
 alias root='sudo ZDOTDIR=$HOME zsh'
 
-# generic profile
+# cross-shell profile
 if [ -f $ZDOTDIR/.profile ]; then
   source $ZDOTDIR/.profile
 elif [ -f ~/.profile ]; then

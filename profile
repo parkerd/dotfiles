@@ -1,3 +1,4 @@
+# profile
 # variables
 export CLICOLOR=1
 export EDITOR=vi

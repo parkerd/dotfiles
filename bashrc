@@ -1,12 +1,18 @@
-# generic profile
+# bashrc
+# system-wide bashrc
+if [ -f /etc/bashrc ]; then
+  source /etc/bashrc
+fi
+
+# alias
+alias root='sudo bash --rcfile ~/.bashrc'
+
+# cross-shell profile
 if [[ $SUDO_COMMAND == *rcfile* ]]; then
   source "$(echo $SUDO_COMMAND | awk '{print $3}' | sed 's/bashrc/profile/')"
 elif [ -f ~/.profile ]; then
   source ~/.profile
 fi
-
-# alias
-alias root='sudo bash --rcfile ~/.bashrc'
 
 # prompt
 if [ $(id -u) -eq 0 ]; then
