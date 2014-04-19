@@ -126,10 +126,9 @@ if [ -f ~/.dayjob ]; then
 fi
 
 # reset terminal
-#if [ "$TERM" != "dumb" ]; then
-  #cd
-  #clear
-#fi
+if [ "$TERM" != "dumb" ]; then
+  cd
+fi
 
 if [ -d $PROJECTS/project_prompt ]; then
   source $PROJECTS/project_prompt/project_prompt.sh

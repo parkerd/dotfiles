@@ -1,5 +1,7 @@
 # generic profile
-if [ -f ~/.profile ]; then
+if [[ $SUDO_COMMAND == *rcfile* ]]; then
+  source "$(echo $SUDO_COMMAND | awk '{print $3}' | sed 's/bashrc/profile/')"
+elif [ -f ~/.profile ]; then
   source ~/.profile
 fi
 

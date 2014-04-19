@@ -1,11 +1,13 @@
-# generic profile
-if [ -f ~/.profile ]; then
-  source ~/.profile
-fi
-
 # alias
 alias rake='noglob rake'
-alias root='sudo zsh'
+alias root='sudo ZDOTDIR=$HOME zsh'
+
+# generic profile
+if [ -f $ZDOTDIR/.profile ]; then
+  source $ZDOTDIR/.profile
+elif [ -f ~/.profile ]; then
+  source ~/.profile
+fi
 
 # prompt
 autoload colors && colors
