@@ -44,8 +44,12 @@ bindkey "^R" history-incremental-search-backward
 # settings
 setopt HIST_IGNORE_DUPS
 setopt PROMPT_SUBST
-unsetopt PROMPT_SP
+setopt PROMPT_CR
+setopt PROMPT_SP
+export PROMPT_EOL_MARK=""
 
 # autocomplete
 autoload compinit && compinit -i
 zstyle ':completion:*' menu select
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
