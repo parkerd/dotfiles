@@ -27,12 +27,12 @@ if [ $(id -u) -eq 0 ]; then
 fi
 
 if [ -z "$SSH_CLIENT" -a -z "$SUDO_USER" ]; then
-  export PS1=$PS1_COLOR'%~ $(prompt_char) '$reset_color
+  export PS1="%{$PS1_COLOR%}%~ $(prompt_char)%{$reset_color%} "
 else
   if [ -z "$MC_HOSTNAME" ]; then
-    export PS1=$PS1_COLOR'%m %~ $(prompt_char) '$reset_color
+    export PS1="%{$PS1_COLOR%}%m %~ $(prompt_char)%{$reset_color%} "
   else
-    export PS1=$PS1_COLOR$MC_HOSTNAME' %~ $(prompt_char) '$reset_color
+    export PS1="%{$PS1_COLOR%}$MC_HOSTNAME %~ $(prompt_char)%{$reset_color%} "
   fi
 fi
 
