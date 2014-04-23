@@ -21,6 +21,10 @@ export DOTFILES=$PROJECTS/dotfiles
 if [ -d "$PROJECTS/go/default" ]; then
   export PATH=$PROJECTS/go/default/bin:$PATH
   export GOPATH=$PROJECTS/go/default
+
+  if which go &> /dev/null; then
+    export PATH=$(go env GOROOT)/bin:$PATH
+  fi
 fi
 
 # npm
@@ -55,6 +59,7 @@ alias l='ls'
 alias ll='ls -l'
 alias grep='grep --color'
 alias irb='irb --simple-prompt'
+alias path="echo $PATH | tr ':' '\n'"
 alias pvm='pyenv'
 alias r='clear && rake'
 alias redis='redis-server /usr/local/etc/redis.conf'
