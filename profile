@@ -44,7 +44,8 @@ if which pyenv &> /dev/null; then
 fi
 
 # rvm
-if [ -s "~/.rvm/scripts/rvm" ]; then
+if [ -d "$HOME/.rvm" ]; then
+  export PATH=$HOME/.rvm/bin:$PATH
   source ~/.rvm/scripts/rvm
 fi
 
@@ -59,7 +60,7 @@ alias l='ls'
 alias ll='ls -l'
 alias grep='grep --color'
 alias irb='irb --simple-prompt'
-alias path="echo $PATH | tr ':' '\n'"
+alias path="echo \$PATH | tr ':' '\n'"
 alias pvm='pyenv'
 alias r='clear && rake'
 alias redis='redis-server /usr/local/etc/redis.conf'

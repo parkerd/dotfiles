@@ -51,5 +51,3 @@ export PROMPT_EOL_MARK=""
 # autocomplete
 autoload compinit && compinit -i
 zstyle ':completion:*' menu select
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
