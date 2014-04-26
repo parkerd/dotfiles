@@ -17,10 +17,15 @@ SUBPROJECTS=( go rq rsg )
 export SUBPROJECTS
 export DOTFILES=$PROJECTS/dotfiles
 
+# dayjob
+if [ -f ~/.dayjob ]; then
+  source ~/.dayjob
+fi
+
 # go
 if [ -d "$PROJECTS/go/default" ]; then
-  export PATH=$PROJECTS/go/default/bin:$PATH
   export GOPATH=$PROJECTS/go/default
+  export PATH=$GOPATH/bin:$PATH
 
   if which go &> /dev/null; then
     export PATH=$(go env GOROOT)/bin:$PATH
@@ -126,11 +131,6 @@ alias get='curl_json -XGET'
 alias put='curl_json -XPUT'
 alias post='curl_json -XPOST'
 alias delete='curl_json -XDELETE'
-
-# work related
-if [ -f ~/.dayjob ]; then
-  source ~/.dayjob
-fi
 
 # reset terminal
 if [ "$TERM" != "dumb" ]; then
