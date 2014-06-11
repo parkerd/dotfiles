@@ -17,9 +17,9 @@ SUBPROJECTS=( go rq rsg )
 export SUBPROJECTS
 export DOTFILES=$PROJECTS/dotfiles
 
-# dayjob
-if [ -f ~/.dayjob ]; then
-  source ~/.dayjob
+# docker
+if [ -f /usr/local/bin/docker ]; then
+  export DOCKER_HOST=tcp://localhost:2375
 fi
 
 # go
@@ -52,6 +52,11 @@ fi
 if [ -d "$HOME/.rvm" ]; then
   export PATH=$HOME/.rvm/bin:$PATH
   source ~/.rvm/scripts/rvm
+fi
+
+# scala
+if [ -d "/usr/local/opt/scala210/bin" ]; then
+  export PATH=/usr/local/opt/scala210/bin:$PATH
 fi
 
 # alias
@@ -131,6 +136,11 @@ alias get='curl_json -XGET'
 alias put='curl_json -XPUT'
 alias post='curl_json -XPOST'
 alias delete='curl_json -XDELETE'
+
+# dayjob
+if [ -f ~/.dayjob ]; then
+  source ~/.dayjob
+fi
 
 # reset terminal
 if [ "$TERM" != "dumb" ]; then
