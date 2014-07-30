@@ -7,6 +7,9 @@ fi
 # alias
 alias root='sudo bash --rcfile ~/.bashrc'
 
+# shopt
+shopt -s globstar
+
 # cross-shell profile
 if [[ $SUDO_COMMAND == *rcfile* ]]; then
   source "$(echo $SUDO_COMMAND | awk '{print $3}' | sed 's/bashrc/profile/')"

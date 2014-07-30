@@ -1,14 +1,14 @@
 # profile
 # variables
 export CLICOLOR=1
-export EDITOR=vi
+export EDITOR=vim
 export HISTCONTROL=ignorespace
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 export HISTFILE=~/.bashistory
 export JRUBY_OPTS=--1.9
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
-export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export VISUAL=vi
 
 export GITHUB=github.com/parkerd
@@ -30,6 +30,12 @@ if [ -d "$PROJECTS/go/default" ]; then
   if which go &> /dev/null; then
     export PATH=$(go env GOROOT)/bin:$PATH
   fi
+fi
+
+# java
+if [ -d "/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home" ]; then
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home/
+  export PATH=$JAVA_HOME/bin:$PATH
 fi
 
 # npm
