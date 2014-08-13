@@ -11,7 +11,7 @@ export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export VISUAL=vi
 
-export GITHUB=github.com/parkerd
+export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
 SUBPROJECTS=( go rq rsg )
 export SUBPROJECTS
@@ -54,15 +54,15 @@ if which pyenv &> /dev/null; then
   eval "$(pyenv init -)"
 fi
 
+# scala
+if [ -d "/usr/local/opt/scala210/bin" ]; then
+  export PATH=/usr/local/opt/scala210/bin:$PATH
+fi
+
 # rvm
 if [ -d "$HOME/.rvm" ]; then
   export PATH=$HOME/.rvm/bin:$PATH
   source ~/.rvm/scripts/rvm
-fi
-
-# scala
-if [ -d "/usr/local/opt/scala210/bin" ]; then
-  export PATH=/usr/local/opt/scala210/bin:$PATH
 fi
 
 # alias

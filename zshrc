@@ -1,5 +1,6 @@
 # zshrc
 # alias
+alias curl='noglob curl'
 alias rake='noglob rake'
 alias root='sudo ZDOTDIR=$HOME zsh'
 
