@@ -1,6 +1,5 @@
 " pathogen settings
-filetype off
-call pathogen#runtime_append_all_bundles()
+execute pathogen#infect()
 
 " key mappings
 let mapleader = ','
