@@ -70,12 +70,15 @@ alias b='bundle'
 alias be='bundle exec'
 alias blog='middleman'
 alias c='clear'
+alias digo='tugboat'
 alias ex='exercism'
+alias grep='grep --color'
+alias Grep='grep'
+alias hgrep='history 1 | grep'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
+alias irb='irb --simple-prompt'
 alias l='ls'
 alias ll='ls -l'
-alias grep='grep --color'
-alias irb='irb --simple-prompt'
 alias path="echo \$PATH | tr ':' '\n'"
 alias pvm='pyenv'
 alias r='clear && rake'
@@ -86,6 +89,7 @@ alias tm='tmux'
 alias tree='tree -a'
 alias vi='vim'
 alias vm='vagrant'
+alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs -I % bash -c "cd % && vagrant halt"'
 
 # ssh-copy-id for mac
 ssh-copy-id() {
@@ -110,7 +114,7 @@ monitor() {
 
 # create .ruby-version and .ruby-gemset
 rvmrc() {
-  if [ "$1" == "help" ]; then
+  if [[ "$1" == "help" ]]; then
     echo 'usage: rvmrc [version] [gemset]'
   elif [ -f .ruby-version -o -f .ruby-gemset ]; then
     echo 'rvm config already exists'

@@ -1,4 +1,5 @@
 [ui]
+ssh = ssh -C
 username = Parker DeBardelaben <parker@mailchimp.com>
 
 [extensions]
