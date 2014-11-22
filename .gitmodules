@@ -9,7 +9,7 @@
 	url = https://github.com/scrooloose/nerdtree.git
 [submodule "vim/bundle/vim-snipmate"]
 	path = vim/bundle/vim-snipmate
-	url = git://github.com/garbas/vim-snipmate.git
+	url = https://github.com/garbas/vim-snipmate.git
 [submodule "vim/bundle/tlib_vim"]
 	path = vim/bundle/tlib_vim
 	url = https://github.com/tomtom/tlib_vim.git
@@ -24,10 +24,10 @@
 	url = https://github.com/tpope/vim-surround
 [submodule "vim/bundle/command-t"]
 	path = vim/bundle/command-t
-	url = git://git.wincent.com/command-t.git
+	url = https://git.wincent.com/command-t.git
 [submodule "vim/bundle/ctrlp"]
 	path = vim/bundle/ctrlp
 	url = https://github.com/kien/ctrlp.vim.git
 [submodule "vim/bundle/puppet"]
 	path = vim/bundle/puppet
-	url = git://github.com/rodjek/vim-puppet.git
+	url = https://github.com/rodjek/vim-puppet.git
