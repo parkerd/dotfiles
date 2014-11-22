@@ -12,7 +12,7 @@
 	url = https://github.com/tpope/vim-surround
 [submodule "vim/bundle/command-t"]
 	path = vim/bundle/command-t
-	url = https://git.wincent.com/command-t.git
+	url = https://github.com/wincent/Command-T
 [submodule "vim/bundle/ctrlp"]
 	path = vim/bundle/ctrlp
 	url = https://github.com/kien/ctrlp.vim.git
