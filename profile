@@ -74,7 +74,6 @@ alias digo='tugboat'
 alias ex='exercism'
 alias grep='grep --color'
 alias Grep='grep'
-alias hgrep='history 1 | grep'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
 alias irb='irb --simple-prompt'
 alias l='ls'
@@ -94,6 +93,15 @@ alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs
 # ssh-copy-id for mac
 ssh-copy-id() {
   cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
+}
+
+# grep all history
+hgrep() {
+  if [ -n "$ZSH_VERSION" ]; then
+    history 1 | grep $@
+  else
+    history | grep $@
+  fi
 }
 
 # monitor the current directory for changes and execute a given command
