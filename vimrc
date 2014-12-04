@@ -9,6 +9,7 @@ set pastetoggle=<F2>
 map <leader>r :NERDTreeToggle<CR>
 map <leader>f :CtrlP<CR>
 map <leader>= :Tab /=<CR>
+map <leader>- :Tab /=><CR>
 nmap <space> zz
 
 " commands
