@@ -18,16 +18,19 @@ br = branch
 ca = commit --amend
 ci = commit
 co = !git stash -u >/dev/null && git checkout $@ && git stash list && echo >/dev/null
+cp = cherry-pick
 df = !git --no-pager diff head
 dfr = !git --no-pager diff -r
 fe = fetch
 in = !git fetch && git log --pretty=format:'%h - %an, %ar: %s' HEAD..origin/master
 lg = !git log --pretty=format:'%h - %an, %ar: %s' --reverse -10 | cat
+lgg = !git log --pretty=format:'%h - %an, %ar: %s' --reverse | cat
 mg = merge
 ms = merge --squash
 out = !git fetch && git log --pretty=format:'%h - %an, %ar: %s' origin/master..HEAD
 pop = stash pop
 re = rebase
+revert = checkout HEAD
 rollback = reset HEAD^
 st = status
 sub = submodule
@@ -40,3 +43,6 @@ default = matching
 required = true
 clean = git media clean %f
 smudge = git media smudge %f
+
+[include]
+path = ~/.gitconfig-dayjob

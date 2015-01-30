@@ -32,6 +32,11 @@ if [ -d "$PROJECTS/go/default" ]; then
   fi
 fi
 
+# hub
+if which hub &> /dev/null; then
+  alias git=hub
+fi
+
 # java
 if [ -d "/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home" ]; then
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home/
