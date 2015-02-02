@@ -20,7 +20,7 @@ else
 fi
 
 if [ -z $3 ]; then
-  branch=$(git branch | grep "^*" | awk '{print $2}')
+  branch=$(git rev-parse --abbrev-ref head)
 else
   branch=$3
 fi

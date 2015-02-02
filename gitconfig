@@ -32,13 +32,13 @@ mg = merge
 ms = merge --squash
 out = !bash ~/.git/compare.sh out
 pop = stash pop
-pr = !git sync && git rebase master && git push -u origin HEAD && hub pull-request
+pr = !git sync && git rebase master && git push -u origin head && hub pull-request
 re = rebase
-revert = checkout HEAD
-rollback = reset HEAD^
+revert = checkout head
+rollback = reset head^
 st = status
 sub = submodule
-sync = !git co master && git pull upstream master && git push origin master
+sync = !bash ~/.git/sync.sh
 up = pull
 
 [push]
