@@ -11,5 +11,9 @@ if [[ "$branch" == "master" ]]; then
     git branch -d $branch && git push origin :$branch
   fi
 else
-  git co master && git sync && git branch -d $branch && git remote prune origin
+  git co master && git sync && git branch -d $branch
+  
+  if [ $(git branch -a | grep -c remotes/origin/$branch) -eq 1 ]; then
+    git remote prune origin
+  fi
 fi
