@@ -14,13 +14,15 @@ interactive = auto
 
 [alias]
 aa = add --all
-br = branch -vv
+br = branch -avv
 ca = commit --amend
+purge = !git fsck && git remote prune origin && git gc --prune=now
 ci = commit
 cm = !git add --all && git commit -m
 co = !git stash -u >/dev/null && git checkout $@ && git stash list
 cb = !git co -b
 cp = cherry-pick
+cs = ci-status -v
 df = !git --no-pager diff head
 dfr = !git --no-pager diff -r
 fe = fetch
