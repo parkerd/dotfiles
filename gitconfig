@@ -16,11 +16,10 @@ interactive = auto
 aa = add --all
 br = branch -avv
 ca = commit --amend
-purge = !git fsck && git remote prune origin && git gc --prune=now
+close = !bash ~/.git/close.sh
 ci = commit
 cm = !git add --all && git commit -m
 co = !git stash -u >/dev/null && git checkout $@ && git stash list
-cb = !git co -b
 cp = cherry-pick
 cs = ci-status -v
 df = !git --no-pager diff head
@@ -32,9 +31,11 @@ lgr = log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --graph -10
 lgg = !git log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --reverse | cat
 mg = merge
 ms = merge --squash
+open = !git co -b
 out = !bash ~/.git/compare.sh out
 pop = stash pop
 pr = !git sync && git rebase master && git push -u origin head && hub pull-request
+purge = !git fsck && git remote prune origin && git gc --prune=now
 re = rebase
 revert = checkout head
 rollback = reset head^
