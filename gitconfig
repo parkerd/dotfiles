@@ -22,6 +22,7 @@ cm = !git add --all && git commit -m
 co = !git stash -u >/dev/null && git checkout $@ && git stash list
 cp = cherry-pick
 cs = ci-status -v
+css = !open $(hub ci-status -v | awk '{print $2}')/console
 df = !git --no-pager diff head
 dfr = !git --no-pager diff -r
 fe = fetch
@@ -45,7 +46,6 @@ sync = !bash ~/.git/sync.sh
 up = pull
 
 [push]
-#default = matching
 default = simple
 
 [filter "media"]
