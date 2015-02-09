@@ -17,11 +17,13 @@ echo -e "git lgg\t\t\tshow full commit history"
 echo -e "git st\t\t\tgit status"
 echo
 echo -e "git in [rmt] [br]\tshow incoming commits for a remote/branch"
-echo -e "git out [rmt]\t\tshow pending commits for a remote"
+echo -e "git out [rmt]\t\tshow outgoing commits for a remote"
+echo -e "git pending [rmt|all]\tshow pending commits for a remote"
 echo -e "git revert <file>\tundo changes to a file"
 echo -e "git rollback\t\tundo the last commit"
 echo -e "git sync\t\tupdate local+origin/master from upstream"
 echo
-echo -e "optional remote defaults to origin"
+echo -e "optional remote for in/out defaults to origin"
+echo -e "optional remote for pending picks: upstream, origin"
 echo -e "optional branch defaults to current unless on master"
 echo

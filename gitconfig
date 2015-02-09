@@ -37,6 +37,7 @@ ms = merge --squash
 open = !git co -b
 out = !bash ~/.git/compare.sh out
 pop = stash pop
+pending = !bash ~/.git/pending.sh
 pr = !git sync && git rebase master && git push -u origin head && hub pull-request
 prr = !open $(hub browse -u -- pulls)
 purge = !git fsck && git remote prune origin && git gc --prune=now
