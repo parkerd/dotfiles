@@ -8,7 +8,7 @@ if [[ "$branch" == "master" ]]; then
     exit 1
   else
     branch=$1
-    git branch -d $branch && git push origin :$branch
+    git branch -d $branch && git push origin :$branch 2>/dev/null
   fi
 else
   git co master && git sync && git branch -d $branch

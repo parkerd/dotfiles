@@ -35,7 +35,7 @@ lgr = log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --graph -10
 lgg = !git log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --reverse | cat
 mg = merge
 ms = merge --squash
-open = !git checkout master && git co -b
+open = !git checkout master && git sync && git co -b
 out = !bash ~/.git/compare.sh out
 pop = stash pop
 pending = !bash ~/.git/pending.sh
