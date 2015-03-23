@@ -128,7 +128,7 @@ monitor() {
   done
 }
 
-# create .ruby-version and .ruby-gemset
+# rvmrc - create .ruby-version and .ruby-gemset
 rvmrc() {
   if [[ "$1" == "help" ]]; then
     echo 'usage: rvmrc [version] [gemset]'
@@ -162,6 +162,49 @@ alias get='curl_json -XGET'
 alias put='curl_json -XPUT'
 alias post='curl_json -XPOST'
 alias delete='curl_json -XDELETE'
+
+# TODO: add support to search $__pp_base if no match
+_find() {
+  command=$1
+  type=$2
+  name=$3
+  choice=$4
+  list=$(find . -type $type -name $name | grep -v "^\./\.")
+  count=$(find . -type $type -name $name | grep -v "^\./\." | wc -l)
+  if [ $count -eq 1 ]; then
+    $command $list
+  elif [ $count -gt 1 ]; then
+    num=1
+    for file in $(echo $list); do
+      if [[ "$choice" =~ "^[0-9]+$" ]]; then
+        if [[ "$choice" == "$num" ]]; then
+	  $command $file
+	fi
+      else
+        echo "${num} - ${file}"
+      fi
+      num=$((num+1))
+    done
+  fi
+}
+
+# vif - find a file and open to edit
+vif() {
+  if [ -z "$1" ]; then
+    echo 'usage: vif <name> [num]'
+    return
+  fi
+  _find vi f $1 $2
+}
+
+# cdf - find a directory and cd to it
+cdf() {
+  if [ -z "$1" ]; then
+    echo 'usage: cdf <name> [num]'
+    return
+  fi
+  _find cd d $1 $2
+}
 
 # dayjob
 if [ -f ~/.dayjob ]; then
