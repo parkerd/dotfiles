@@ -6,6 +6,8 @@ fi
 
 # alias
 alias root='sudo bash --rcfile ~/.bashrc'
+alias vif=vifind
+alias cdf=cdfind
 
 # shopt
 shopt -s globstar

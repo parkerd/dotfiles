@@ -188,8 +188,8 @@ _find() {
   fi
 }
 
-# vif - find a file and open to edit
-vif() {
+# vifind - find a file and open to edit
+vifind() {
   if [ -z "$1" ]; then
     echo 'usage: vif <name> [num]'
     return
@@ -197,8 +197,8 @@ vif() {
   _find vi f $1 $2
 }
 
-# cdf - find a directory and cd to it
-cdf() {
+# cdfind - find a directory and cd to it
+cdfind() {
   if [ -z "$1" ]; then
     echo 'usage: cdf <name> [num]'
     return

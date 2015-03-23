@@ -3,6 +3,8 @@
 alias curl='noglob curl'
 alias rake='noglob rake'
 alias root='sudo ZDOTDIR=$HOME zsh'
+alias vif='noglob vifind'
+alias cdf='noglob cdfind'
 
 # cross-shell profile
 if [ -f $ZDOTDIR/.profile ]; then
