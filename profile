@@ -194,7 +194,11 @@ vifind() {
     echo 'usage: vif <name> [num]'
     return
   fi
-  _find vi f $1 $2
+  if [[ "${1: -1}" == "*" ]]; then
+    _find vi f $1 $2
+  else
+    _find vi f "${1}*" $2
+  fi
 }
 
 # cdfind - find a directory and cd to it
