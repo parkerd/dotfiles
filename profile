@@ -17,9 +17,9 @@ SUBPROJECTS=( go rq rsg )
 export SUBPROJECTS
 export DOTFILES=$PROJECTS/dotfiles
 
-# docker
-if [ -f /usr/local/bin/docker ]; then
-  export DOCKER_HOST=tcp://localhost:2375
+# boot2docker
+if [ -f /usr/local/bin/boot2docker ]; then
+  $(boot2docker shellinit 2>&1 | grep export)
 fi
 
 # go
