@@ -14,7 +14,7 @@ interactive = auto
 
 [alias]
 aa = add --all
-br = branch -avv
+br = branch -vv
 brd = branch -d
 ca = commit --amend
 close = !bash ~/.git/close.sh
