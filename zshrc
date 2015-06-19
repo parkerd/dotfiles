@@ -1,6 +1,7 @@
 # zshrc
 # alias
 alias curl='noglob curl'
+alias history='history 1'
 alias rake='noglob rake'
 alias root='sudo ZDOTDIR=$HOME zsh'
 alias vif='noglob vifind'

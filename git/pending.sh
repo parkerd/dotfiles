@@ -24,7 +24,7 @@ check_remote() {
 
 if [ -z $1 ]; then
   remote=upstream
-  if [ "$(git remote | grep -c upstream)" -lt 1 ];then
+  if [ "$(git remote | grep -c upstream)" -lt 1 ]; then
     remote=origin
   fi
 else

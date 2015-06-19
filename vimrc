@@ -79,3 +79,22 @@ if has("gui_macvim")
   colorscheme jellybeans
   map <C-T> :vs<CR>
 endif
+
+" neocomplete
+"au BufRead,BufNewFile *.scala let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplete#close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+" crontab
+autocmd filetype crontab setlocal nobackup nowritebackup

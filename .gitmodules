@@ -19,3 +19,12 @@
 [submodule "vim/bundle/tabular"]
 	path = vim/bundle/tabular
 	url = https://github.com/godlygeek/tabular
+[submodule "vim/bundle/vim-scala"]
+	path = vim/bundle/vim-scala
+	url = https://github.com/derekwyatt/vim-scala
+[submodule "vim/bundle/neocomplete"]
+	path = vim/bundle/neocomplete
+	url = https://github.com/Shougo/neocomplete.vim
+[submodule "vim/bundle/vim-go"]
+	path = vim/bundle/vim-go
+	url = https://github.com/fatih/vim-go
