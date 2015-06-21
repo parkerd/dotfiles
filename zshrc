@@ -55,3 +55,4 @@ export PROMPT_EOL_MARK=""
 # autocomplete
 autoload compinit && compinit -i
 zstyle ':completion:*' menu select
+function _git_co() { _git_checkout }
