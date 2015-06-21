@@ -97,6 +97,8 @@ alias tree='tree -a'
 alias vi='vim'
 alias vm='vagrant'
 alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs -I % bash -c "cd % && vagrant halt"'
+alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
+alias sudox=xsudo
 
 # ssh-copy-id for mac
 ssh-copy-id() {
