@@ -7,17 +7,24 @@ if [ -z $DOTFILES ]; then
   exit 1
 fi
 
+create_link() {
+  dotfile=$1
+  filepath=$2
+  echo "Linking ${dotfile} -> ${filepath}"
+  ln -s $filepath $dotfile
+}
+
 update_link() {
   dotfile=~/.$1
-  if [ -L $dotfile ]; then
+  if [ ! -e $dotfile ]; then
+    create_link $dotfile $filepath
+  elif [ -L $dotfile ]; then
     if [ $(readlink $dotfile | grep -c $DOTFILES) -eq 0 ]; then
       rm $dotfile
-      filepath=$DOTFILES/$1
-      echo "Linking ${dotfile} -> ${filepath}"
-      ln -s $filepath $dotfile
+      create_link $dotfile $filepath
     fi
   else
-    echo "$1 is not a symlink"
+    echo "${dotfile} is not a symlink"
   fi
 }
 
