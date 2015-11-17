@@ -1,3 +1,4 @@
+# vi: set ft=sh :
 # zshrc
 # alias
 alias curl='noglob curl'

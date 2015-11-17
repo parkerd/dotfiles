@@ -1,3 +1,4 @@
+# vi: set ft=sh :
 # profile
 # variables
 export CLICOLOR=1
@@ -15,11 +16,28 @@ export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
 SUBPROJECTS=( go rq rsg )
 export SUBPROJECTS
-export DOTFILES=$PROJECTS/dotfiles
 
-# boot2docker
-if [ -f /usr/local/bin/boot2docker ]; then
-  $(boot2docker shellinit 2>&1 | grep export)
+# docker-machine
+if [ -f /usr/local/bin/docker-machine ]; then
+  eval "$(docker-machine env default)"
+
+  alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
+
+  export DOCKER_IP=$(docker-machine ip default 2>/dev/null)
+  if [ $? -eq 0 ]; then
+    alias dockerui="docker run -d -p 9000:9000 --privileged -v /var/run/docker.sock:/var/run/docker.sock --name dockerui dockerui/dockerui &>/dev/null; open http://$DOCKER_IP:9000/"
+    alias shipyard="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock shipyard/deploy start &>/dev/null; open http://$DOCKER_IP:8080/"
+  fi
+fi
+
+# ccat
+if which ccat &> /dev/null; then
+  alias cat="ccat --bg=dark -G Keyword=yellow -G String=brown -G Type=reset -G Literal=reset -G Tag=reset -G Plaintext=reset -G Comment=darkgray"
+fi
+
+# colordiff
+if which colordiff &> /dev/null; then
+  alias diff=colordiff
 fi
 
 # go
@@ -83,6 +101,7 @@ alias gst='git st'
 alias grep='grep --color'
 alias Grep='grep'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
+alias ipy=ipython
 alias irb='irb --simple-prompt'
 alias l='ls'
 alias ll='ls -l'
@@ -178,12 +197,18 @@ _find() {
   elif [ $count -gt 1 ]; then
     num=1
     for file in $(echo $list); do
-      if [[ "$choice" =~ "^[0-9]+$" ]]; then
-        if [[ "$choice" == "$num" ]]; then
-	  $command $file
-	fi
+      if [[ "$file" =~ ".*\/$name\$" ]]; then
+        $command $file
+        break
       else
-        echo "${num} - ${file}"
+        if [[ "$choice" =~ "^[0-9]+$" ]]; then
+          if [[ "$choice" == "$num" ]]; then
+            $command $file
+            break
+          fi
+        else
+          echo "${num} - ${file}"
+        fi
       fi
       num=$((num+1))
     done
@@ -210,6 +235,10 @@ cdfind() {
     return
   fi
   _find cd d $1 $2
+}
+
+dash() {
+  open "$(echo "dash://$@")"
 }
 
 # dayjob
