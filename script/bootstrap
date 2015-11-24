@@ -1,0 +1,70 @@
+#!/bin/sh
+
+set -e
+
+cd "$(dirname "$0")/.."
+dotfiles=$(pwd)
+
+log() {
+  echo "==> $@..."
+}
+
+ok() {
+  echo "    OK"
+}
+
+fail() {
+  echo "!!! $@" >&2
+  exit 1
+}
+
+links=$(ls -1 | grep -vE "README.md|script")
+
+create_link() {
+  dotfile=$1
+  filepath=$2
+
+  echo "    Linking ${dotfile} -> ${filepath}"
+  ln -s $filepath $dotfile
+}
+
+update_link() {
+  dotfile=$1
+  filepath=$2
+
+  log "Checking $dotfile"
+  if [ ! -e $dotfile ]; then
+    create_link $dotfile $filepath
+  elif [ -L $dotfile ]; then
+    if [[ $(readlink $dotfile) == $dotfiles* ]]; then
+      ok
+    else
+      fail "..."
+    fi
+  elif [ -d $dotfile ]; then
+      for name in $(ls -1 $filepath); do
+        update_link $dotfile/$name $filepath/$name
+      done
+  else
+    fail "${dotfile} is not a symlink"
+  fi
+}
+
+# main
+if [ -d $dotfiles ]; then
+  cd $dotfiles
+
+  for name in $links; do
+    update_link ~/.$name $dotfiles/$name
+  done
+else
+  fail "does not exist: ${dotfiles}"
+fi
+
+log "Checking NeoBundle"
+if [ -d "vim/bundle/neobundle.vim" ]; then
+  ok
+else
+  git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+  echo "Run `script/neobundle` to install NeoBundle plugins."
+fi
