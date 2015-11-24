@@ -33,3 +33,9 @@ else
     export PS1=$PS1_COLOR$MC_HOSTNAME' \w \$ \[\e[0m\]'
   fi
 fi
+
+# history
+export HISTCONTROL=ignorespace
+export HISTFILESIZE=10000
+export HISTSIZE=10000
+export HISTFILE=~/.bash_history

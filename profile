@@ -3,14 +3,11 @@
 # variables
 export CLICOLOR=1
 export EDITOR=vim
-export HISTCONTROL=ignorespace
-export HISTFILESIZE=10000
-export HISTSIZE=10000
-export HISTFILE=~/.bash_history
 export JRUBY_OPTS=--1.9
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-export VISUAL=vi
+export PYTHONDONTWRITEBYTECODE=1
+export VISUAL=vim
 
 export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
@@ -20,13 +17,9 @@ export SUBPROJECTS
 # docker-machine
 if [ -f /usr/local/bin/docker-machine ]; then
   eval "$(docker-machine env default)"
-
-  alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
-
-  export DOCKER_IP=$(docker-machine ip default 2>/dev/null)
   if [ $? -eq 0 ]; then
-    alias dockerui="docker run -d -p 9000:9000 --privileged -v /var/run/docker.sock:/var/run/docker.sock --name dockerui dockerui/dockerui &>/dev/null; open http://$DOCKER_IP:9000/"
-    alias shipyard="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock shipyard/deploy start &>/dev/null; open http://$DOCKER_IP:8080/"
+    export DOCKER_IP=$(docker-machine ip default)
+    alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
   fi
 fi
 
@@ -120,9 +113,9 @@ alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthor
 alias sudox=xsudo
 
 # ssh-copy-id for mac
-ssh-copy-id() {
-  cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
-}
+#ssh-copy-id() {
+  #cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
+#}
 
 # grep all history
 hgrep() {
@@ -190,17 +183,17 @@ _find() {
   type=$2
   name=$3
   choice=$4
-  list=$(find . -type $type -name $name | grep -v "^\./\.")
-  count=$(find . -type $type -name $name | grep -v "^\./\." | wc -l)
+  list=$(find . -type $type -name $name | grep -v "^\./\." | grep -v "\.pyc$")
+  count=$(find . -type $type -name $name | grep -v "^\./\." | grep -v "\.pyc$" | $wc -l)
   if [ $count -eq 1 ]; then
     $command $list
   elif [ $count -gt 1 ]; then
     num=1
     for file in $(echo $list); do
-      if [[ "$file" =~ ".*\/$name\$" ]]; then
-        $command $file
-        break
-      else
+      #if [[ "$file" =~ ".*\/$name\$" ]]; then
+        #$command $file
+        #break
+      #else
         if [[ "$choice" =~ "^[0-9]+$" ]]; then
           if [[ "$choice" == "$num" ]]; then
             $command $file
@@ -209,7 +202,7 @@ _find() {
         else
           echo "${num} - ${file}"
         fi
-      fi
+      #fi
       num=$((num+1))
     done
   fi
@@ -222,9 +215,9 @@ vifind() {
     return
   fi
   if [[ "${1: -1}" == "*" ]]; then
-    _find vi f $1 $2
+    _find vim f $1 $2
   else
-    _find vi f "${1}*" $2
+    _find vim f "${1}*" $2
   fi
 }
 
@@ -238,7 +231,7 @@ cdfind() {
 }
 
 dash() {
-  open "$(echo "dash://$@")"
+  open "dash://${*}"
 }
 
 # dayjob

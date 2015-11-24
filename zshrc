@@ -41,13 +41,28 @@ else
   fi
 fi
 
+# promptline
+if [ -f ~/.promptline.conf ]; then
+  source ~/.promptline.conf
+fi
+
 # bash-style bindings
 bindkey "^A" beginning-of-line
 bindkey "^E" end-of-line
 bindkey "^R" history-incremental-search-backward
 
 # settings
+export HISTFILE=$HOME/.zhistory
+export HISTSIZE=SAVEHIST=99999
+#setopt APPEND_HISTORY
+#setopt HIST_EXPIRE_DUPS_FIRST
+#setopt HIST_FCNTL_LOCK
+#setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+#setopt HIST_VERIFY
+#setopt INC_APPEND_HISTORY
+setopt SHAREHISTORY
 setopt PROMPT_SUBST
 setopt PROMPT_CR
 setopt PROMPT_SP
