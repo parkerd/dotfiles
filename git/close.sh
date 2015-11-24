@@ -1,6 +1,6 @@
 #!/bin/bash
 
-branch=$(git rev-parse --abbrev-ref head)
+branch=$(git rev-parse --abbrev-ref HEAD)
 
 if [[ "$branch" == "master" ]]; then
   if [ -z $1 ]; then
