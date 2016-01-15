@@ -19,6 +19,7 @@ NeoBundle 'bling/vim-airline'
 NeoBundleFetch 'edkolev/tmuxline.vim'
 NeoBundle 'edkolev/promptline.vim'
 " Usability
+NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'ervandew/supertab'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'majutsushi/tagbar'
@@ -109,8 +110,8 @@ set cursorline! cursorcolumn!
 nmap <silent> <Leader>c :set cursorline! cursorcolumn!<CR>
 
 " line length
-let w:m1=matchadd('VertSplit', '\%<81v.\%>77v', -1)
-let w:m2=matchadd('Cursor', '\%>80v.\+', -1)
+let w:m1=matchadd('Todo', '\%<81v.\%>77v', -1)
+let w:m2=matchadd('Error', '\%>80v.\+', -1)
 nmap <silent> <Leader>l
   \ :if exists('w:m1') <Bar>
   \   silent! call matchdelete(w:m1) <Bar>
