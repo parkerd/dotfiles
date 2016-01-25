@@ -22,6 +22,7 @@ ci = commit
 cheat = !bash ~/.git/cheat.sh
 cm = !git add --all && git commit -m
 co = !bash ~/.git/checkout.sh
+copr = !bash ~/.git/copr.sh
 cp = cherry-pick
 cs = ci-status -v
 css = !open $(hub ci-status -v | awk '{print $2}')/console
