@@ -1,0 +1,32 @@
+#!/bin/bash
+
+usage() {
+  echo "usage: $0 <remote>/<branch>"
+  exit 1
+}
+
+if [ -z "$1" ]; then
+  usage
+else
+  data=(${1//\// })
+  remote=${data[0]}
+  branch=${data[1]}
+
+  if [[ -z "$remote" || -z "$branch" ]]; then
+    usage
+  fi
+
+  if git remote get-url $remote &> /dev/null; then
+    git fetch $remote
+  else
+    url=$(git remote get-url origin | sed "s/:.*\//:$remote\//")
+    git remote add $remote $url
+    git fetch $remote
+    if [[ $? -ne 0 ]]; then
+      git remote remove $remote
+      exit 2
+    fi
+  fi
+
+  git co $branch
+fi

@@ -17,30 +17,24 @@ aa = add --all
 br = branch -vv
 brd = branch -d
 ca = commit --amend
-close = !bash ~/.git/close.sh
 ci = commit
-cheat = !bash ~/.git/cheat.sh
 cm = !git add --all && git commit -m
-co = !bash ~/.git/checkout.sh
-copr = !bash ~/.git/copr.sh
 cp = cherry-pick
 cs = ci-status -v
 css = !open $(hub ci-status -v | awk '{print $2}')/console
 df = !git --no-pager diff HEAD
 dfl = !git --no-pager diff HEAD^
-dfr = !bash ~/.git/diff.sh
 fe = fetch
-in = !bash ~/.git/compare.sh in
+in = compare-remote in
 lg = log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --reverse -10
 lgr = log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --graph -10
 lgg = !git log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --reverse | cat
 mg = merge
 ms = merge --squash
 open = !git checkout master && git sync && git co -b
-out = !bash ~/.git/compare.sh out
+out = compare-remote out
 pop = stash pop
-pending = !bash ~/.git/pending.sh
-pr = !git sync && git rebase master && git push -u origin HEAD && hub pull-request
+pr = !git push -u origin HEAD && hub pull-request && git workon master
 prr = !open $(hub browse -u -- pulls)
 purge = !git fsck && git remote prune origin && git gc --prune=now
 re = rebase
@@ -48,7 +42,7 @@ rmt = remote -v
 rollback = reset HEAD^
 st = status --short --branch
 sub = submodule
-sync = !bash ~/.git/sync.sh
+undo = checkout --
 up = pull
 
 [push]

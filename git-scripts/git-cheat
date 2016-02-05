@@ -2,6 +2,8 @@
 
 echo -e "git br\t\t\tlist branches"
 echo -e "git co <br>\t\tcheckout branch, stash/pop branch changes"
+echo -e "git cobr <rmt>/<br>\tcheckout branch from a fork"
+echo -e "git copr <id>\t\tcheckout a pull request"
 echo -e "git cm \"msg\"\t\tcommit all changed files"
 echo -e "git st\t\t\tgit status"
 echo
