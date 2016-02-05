@@ -18,9 +18,20 @@ export SUBPROJECTS
 if [ -f /usr/local/bin/docker-machine ]; then
   eval "$(docker-machine env default)"
   if [ $? -eq 0 ]; then
-    export DOCKER_IP=$(docker-machine ip default)
     alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
+    docker-env() {
+      if [ -z "$1" ]; then
+        docker-machine active
+      else
+        eval "$(docker-machine env "$1")"
+      fi
+    }
   fi
+fi
+
+# ag
+if which ag &> /dev/null; then
+  alias ack=ag
 fi
 
 # ccat
@@ -43,6 +54,11 @@ if [ -d "$PROJECTS/go/default" ]; then
   fi
 fi
 
+# git
+if [ -d "$HOME/.git-scripts" ]; then
+  export PATH=$HOME/.git-scripts:$PATH
+fi
+
 # hub
 if which hub &> /dev/null; then
   alias git=hub
@@ -60,9 +76,9 @@ if [ -d "/usr/local/share/npm" ]; then
   export NODE_PATH=/usr/local/share/npm/lib/node_modules
 fi
 
-# php
-if [ -d "/usr/local/opt/php53" ]; then
-  export PATH=/usr/local/opt/php53/bin:$PATH
+# phpbrew
+if [ -d "$HOME/.phpbrew" ]; then
+  source ~/.phpbrew/bashrc
 fi
 
 # pyenv
@@ -82,9 +98,10 @@ if [ -d "$HOME/.rvm" ]; then
 fi
 
 # alias
+alias atom='PYENV_VERSION=$(pyenv version-name) atom'
 alias b='bundle'
 alias be='bundle exec'
-alias blog='middleman'
+alias blog='hugo'
 alias c='clear'
 alias digo='tugboat'
 alias ex='exercism'
