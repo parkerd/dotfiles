@@ -1,6 +1,6 @@
 # vi: set ft=sh :
 # zshrc
-# alias
+# aliases
 alias curl='noglob curl'
 alias history='history 1'
 alias rake='noglob rake'
@@ -69,6 +69,14 @@ setopt PROMPT_SP
 export PROMPT_EOL_MARK=""
 
 # autocomplete
+fpath=(/usr/local/share/zsh-completions $fpath)
 autoload compinit && compinit -i
 zstyle ':completion:*' menu select
+function _git_close() { _git_checkout }
 function _git_co() { _git_checkout }
+function _git_workon() { _git_checkout }
+
+# syntax highlighting
+if [[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
