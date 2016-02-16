@@ -14,6 +14,12 @@ export PROJECTS=~/projects
 SUBPROJECTS=( go rq rsg )
 export SUBPROJECTS
 
+# direnv
+if which direnv &> /dev/null; then
+  export DIRENV_LOG_FORMAT=
+  eval "$(direnv hook $(basename $SHELL))"
+fi
+
 # docker-machine
 if [ -f /usr/local/bin/docker-machine ]; then
   eval "$(docker-machine env default)"
@@ -77,9 +83,10 @@ if [ -d "/usr/local/share/npm" ]; then
 fi
 
 # phpbrew
-if [ -d "$HOME/.phpbrew" ]; then
-  source ~/.phpbrew/bashrc
-fi
+# SLOW
+#if [ -d "$HOME/.phpbrew" ]; then
+#  source ~/.phpbrew/bashrc
+#fi
 
 # pyenv
 if which pyenv &> /dev/null; then
@@ -105,8 +112,8 @@ alias blog='hugo'
 alias c='clear'
 alias digo='tugboat'
 alias ex='exercism'
-alias gcm='git co master'
-alias gco='git co'
+alias gcm='git-co master'
+alias gco='git-co'
 alias gst='git st'
 alias grep='grep --color'
 alias Grep='grep'
