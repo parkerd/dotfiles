@@ -18,7 +18,7 @@ fail() {
   exit 1
 }
 
-links=$(ls -1 | grep -vE "README.md|script")
+links=$(ls -1 | grep -vE "^(README.md|script)")
 
 create_link() {
   dotfile=$1
