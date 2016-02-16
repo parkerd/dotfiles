@@ -33,7 +33,9 @@
 # c.InteractiveShellApp.exec_PYTHONSTARTUP = True
 
 # lines of code to run at IPython startup.
-# c.InteractiveShellApp.exec_lines = traitlets.Undefined
+c.InteractiveShellApp.exec_lines = [
+    'from see import see',
+]
 
 # Enable GUI event loop integration with any of ('glut', 'gtk', 'gtk3', 'osx',
 # 'pyglet', 'qt', 'qt5', 'tk', 'wx').
