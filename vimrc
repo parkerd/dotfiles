@@ -25,10 +25,11 @@ NeoBundle 'godlygeek/tabular'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'mhinz/vim-startify'
 NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'scrooloose/syntastic'
+"NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'vim-scripts/bats.vim'
 NeoBundleLazy 'kien/ctrlp.vim'
 NeoBundleLazy 'rizzatti/dash.vim'
 NeoBundleLazy 'scrooloose/nerdtree'
@@ -41,12 +42,12 @@ NeoBundle 'rust-lang/rust.vim'
 NeoBundle 'hdima/python-syntax'
 NeoBundle 'hynek/vim-python-pep8-indent'
 NeoBundle 'tmhedberg/SimpylFold'
-NeoBundleLazy 'davidhalter/jedi-vim'
-NeoBundleLazy 'lambdalisue/vim-pyenv', {
-  \ 'depends': ['davidhalter/jedi-vim'],
-  \ 'autoload': {
-  \   'filetypes': ['python', 'python3'],
-  \ }}
+"NeoBundleLazy 'davidhalter/jedi-vim'
+"NeoBundleLazy 'lambdalisue/vim-pyenv', {
+  "\ 'depends': ['davidhalter/jedi-vim'],
+  "\ 'autoload': {
+  "\   'filetypes': ['python', 'python3'],
+  "\ }}
 
 call neobundle#end()
 
@@ -155,7 +156,7 @@ if has("lua")
   endfunction
 
   " <TAB>: completion.
-  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+  inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 endif
 
 " crontab
