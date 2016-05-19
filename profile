@@ -14,31 +14,34 @@ export PROJECTS=~/projects
 SUBPROJECTS=( go rq rsg )
 export SUBPROJECTS
 
-# direnv
-if which direnv &> /dev/null; then
-  export DIRENV_LOG_FORMAT=
-  eval "$(direnv hook $(basename $SHELL))"
-fi
-
 # docker-machine
-if [ -f /usr/local/bin/docker-machine ]; then
-  eval "$(docker-machine env default)"
-  if [ $? -eq 0 ]; then
-    alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
-    docker-env() {
-      if [ -z "$1" ]; then
-        docker-machine active
+#if [[ -f /usr/local/bin/docker-machine ]]; then
+  #eval "$(docker-machine env default)"
+#fi
+
+# docker
+if [[ -f /usr/local/bin/docker ]]; then
+  alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
+  docker-env() {
+    if [[ -z "$1" ]]; then
+      result=$(docker-machine active 2>&1)
+      if [[ $? -eq 1 ]]; then
+        echo mac
       else
-        eval "$(docker-machine env "$1")"
+        echo $result
       fi
-    }
-  fi
+    elif [[ "$1" == "mac" ]]; then
+      for var in $(env | grep DOCKER | cut -d= -f1); do unset $var; done
+    else
+      eval "$(docker-machine env "$1")"
+    fi
+  }
 fi
 
 # ag
-if which ag &> /dev/null; then
-  alias ack=ag
-fi
+#if which ag &> /dev/null; then
+  #alias ack=ag
+#fi
 
 # ccat
 if which ccat &> /dev/null; then
@@ -110,8 +113,8 @@ alias b='bundle'
 alias be='bundle exec'
 alias blog='hugo'
 alias c='clear'
-alias digo='tugboat'
 alias ex='exercism'
+alias g='gcloud'
 alias gcm='git-co master'
 alias gco='git-co'
 alias gst='git st'
@@ -120,14 +123,18 @@ alias Grep='grep'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
 alias ipy=ipython
 alias irb='irb --simple-prompt'
+alias k=kubectl
 alias l='ls'
 alias ll='ls -l'
+alias mailhog='open "http://localhost:8025/"'
+alias mh='open "http://localhost:8025/"'
 alias path="echo \$PATH | tr ':' '\n'"
 alias pvm='pyenv'
 alias r='clear && rake'
 alias redis='redis-server /usr/local/etc/redis.conf'
 alias sum='paste -sd+ - | bc'
 alias t='clear && rspec'
+alias tf=terraform
 alias tm='tmux'
 alias tree='tree -a'
 alias vi='vim'
@@ -208,10 +215,10 @@ _find() {
   name=$3
   choice=$4
   list=$(find . -type $type -name $name | grep -v "^\./\." | grep -v "\.pyc$")
-  count=$(find . -type $type -name $name | grep -v "^\./\." | grep -v "\.pyc$" | $wc -l)
-  if [ $count -eq 1 ]; then
+  count=$(echo "$list" | wc -l)
+  if [[ $count -eq 1 ]]; then
     $command $list
-  elif [ $count -gt 1 ]; then
+  elif [[ $count -gt 1 ]]; then
     num=1
     for file in $(echo $list); do
       #if [[ "$file" =~ ".*\/$name\$" ]]; then
@@ -234,7 +241,7 @@ _find() {
 
 # vifind - find a file and open to edit
 vifind() {
-  if [ -z "$1" ]; then
+  if [[ -z "$1" ]]; then
     echo 'usage: vif <name> [num]'
     return
   fi
