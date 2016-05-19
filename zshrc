@@ -15,6 +15,12 @@ elif [ -f ~/.profile ]; then
   source ~/.profile
 fi
 
+# direnv
+if which direnv &> /dev/null; then
+	#export DIRENV_LOG_FORMAT=
+	eval "$(direnv hook zsh)"
+fi
+
 # prompt
 autoload colors && colors
 #autoload promptinit && promptinit
@@ -50,6 +56,8 @@ fi
 bindkey "^A" beginning-of-line
 bindkey "^E" end-of-line
 bindkey "^R" history-incremental-search-backward
+bindkey "^W" forward-word
+bindkey "^D" backward-word
 
 # settings
 export HISTFILE=$HOME/.zhistory
@@ -80,3 +88,21 @@ function _git_workon() { _git_checkout }
 if [[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
+
+# pip zsh completion start
+function _pip_completion {
+  local words cword
+  read -Ac words
+  read -cn cword
+  reply=( $( COMP_WORDS="$words[*]" \
+             COMP_CWORD=$(( cword-1 )) \
+             PIP_AUTO_COMPLETE=1 $words[1] ) )
+}
+compctl -K _pip_completion pip
+# pip zsh completion end
+
+# The next line updates PATH for the Google Cloud SDK.
+source '/usr/local/google-cloud-sdk/path.zsh.inc'
+
+# The next line enables shell command completion for gcloud.
+source '/usr/local/google-cloud-sdk/completion.zsh.inc'
