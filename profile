@@ -26,10 +26,16 @@ if [[ -f /usr/local/bin/docker ]]; then
     if [[ -z "$1" ]]; then
       result=$(docker-machine active 2>&1)
       if [[ $? -eq 1 ]]; then
-        echo mac
+        if [[ "$DOCKER_CERT_PATH" =~ "minikube" ]]; then
+          echo minikube
+        else
+          echo mac
+        fi
       else
         echo $result
       fi
+    elif [[ "$1" == "minikube" ]]; then
+      eval $(minikube docker-env)
     elif [[ "$1" == "mac" ]]; then
       for var in $(env | grep DOCKER | cut -d= -f1); do unset $var; done
     else
@@ -128,6 +134,7 @@ alias l='ls'
 alias ll='ls -l'
 alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
+alias mk=minikube
 alias path="echo \$PATH | tr ':' '\n'"
 alias pvm='pyenv'
 alias r='clear && rake'
@@ -166,6 +173,7 @@ monitor() {
   while true; do
     hash2=$(eval $findsum)
     if [[ $hash1 != $hash2 ]]; then
+      echo "Running '$command'"
       eval $command
       hash1=$(eval $findsum)
     fi
@@ -196,6 +204,64 @@ rvmrc() {
     cd .
   fi
   rvm current
+}
+
+# pyv - setup pyenv virtualenv
+pyv() {
+  version=$1
+  venv=$(basename $PWD)-$version
+  if ! which pyenv &> /dev/null; then
+    echo "missing pyenv"
+    return
+  fi
+  if [[ -z "$version" ]]; then
+    echo "usage: $0 <version>"
+    return
+  fi
+  if ! pyenv versions --bare | grep "^\d" | grep -v envs | grep $version &> /dev/null; then
+    echo "unknown version: $version"
+    return
+  fi
+  if ! pyenv version-name | grep "^system" &> /dev/null; then
+    echo "already in pyenv:"
+    pyenv version
+    return
+  fi
+  if pyenv versions | grep "^${venv}" &> /dev/null; then
+    echo "venv already exists: ${venv}"
+    return
+  fi
+
+  pyenv virtualenv $version $venv
+  echo $venv > .python-version
+  pip install --upgrade pip==8.1.1
+  pip install pip-tools
+
+  echo "ipython
+pip-tools
+ptpython
+pylint
+pytest
+pytest-catchlog
+pytest-mock
+pytest-notifier
+pytest-sugar
+pytest-watch
+pytest-xdist
+see" > dev-requirements.in
+  pip-compile dev-requirements.in
+  pip install -r dev-requirements.txt
+
+  echo "[MASTER]
+errors-only=true
+
+[MESSAGES CONTROL]
+disable=no-member,invalid-sequence-index
+" > .pylintrc
+
+  echo
+  pyenv version
+  pip freeze
 }
 
 # json api
