@@ -32,6 +32,13 @@ update_link() {
   dotfile=$1
   filepath=$2
 
+  # Skip vim setup if vim doesn't exist
+  if [[ "$dotfile" == *.vim* ]]; then
+    if ! which vim &> /dev/null; then
+      return
+    fi
+  fi
+
   log "Checking $dotfile"
   if [[ ! -e $dotfile ]]; then
     create_link $dotfile $filepath

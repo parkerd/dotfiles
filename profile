@@ -146,16 +146,22 @@ alias t='clear && rspec'
 alias tf=terraform
 alias tm=tmux
 alias tree='tree -a'
-alias vi=vim
 alias vm=vagrant
 alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs -I % bash -c "cd % && vagrant halt"'
 alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
 alias sudox=xsudo
 
+# vim
+if which vim &> /dev/null; then
+  alias vi=vim
+fi
+
 # ssh-copy-id for mac
-#ssh-copy-id() {
-  #cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
-#}
+if ! which ssh-copy-id &> /dev/null; then
+  ssh-copy-id() {
+    cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
+  }
+fi
 
 # grep all history
 hgrep() {
