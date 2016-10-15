@@ -11,7 +11,7 @@ export VISUAL=vim
 
 export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
-SUBPROJECTS=( go rq rsg )
+SUBPROJECTS=( go rsg )
 export SUBPROJECTS
 
 # docker-machine
@@ -115,17 +115,18 @@ fi
 
 # alias
 alias atom='PYENV_VERSION=$(pyenv version-name) atom'
-alias b='bundle'
+alias b=bundle
 alias be='bundle exec'
-alias blog='hugo'
-alias c='clear'
-alias ex='exercism'
-alias g='gcloud'
+alias blog=hugo
+alias c=clear
+alias ex=exercism
+alias g=gcloud
 alias gcm='git-co master'
 alias gco='git-co'
 alias gst='git st'
 alias grep='grep --color'
 alias Grep='grep'
+alias gssh="ssh -i ~/.ssh/google_compute_engine"
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
 alias ipy=ipython
 alias irb='irb --simple-prompt'
@@ -136,16 +137,17 @@ alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
 alias mk=minikube
 alias path="echo \$PATH | tr ':' '\n'"
-alias pvm='pyenv'
+alias pti=ptipython
+alias pvm=pyenv
 alias r='clear && rake'
 alias redis='redis-server /usr/local/etc/redis.conf'
 alias sum='paste -sd+ - | bc'
 alias t='clear && rspec'
 alias tf=terraform
-alias tm='tmux'
+alias tm=tmux
 alias tree='tree -a'
-alias vi='vim'
-alias vm='vagrant'
+alias vi=vim
+alias vm=vagrant
 alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs -I % bash -c "cd % && vagrant halt"'
 alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
 alias sudox=xsudo
