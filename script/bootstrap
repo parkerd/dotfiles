@@ -33,15 +33,15 @@ update_link() {
   filepath=$2
 
   log "Checking $dotfile"
-  if [ ! -e $dotfile ]; then
+  if [[ ! -e $dotfile ]]; then
     create_link $dotfile $filepath
-  elif [ -L $dotfile ]; then
+  elif [[ -L $dotfile ]]; then
     if [[ $(readlink $dotfile) == $dotfiles* ]]; then
       ok
     else
       fail "..."
     fi
-  elif [ -d $dotfile ]; then
+  elif [[ -d $dotfile ]]; then
       for name in $(ls -1 $filepath); do
         update_link $dotfile/$name $filepath/$name
       done
@@ -51,7 +51,7 @@ update_link() {
 }
 
 # main
-if [ -d $dotfiles ]; then
+if [[ -d $dotfiles ]]; then
   cd $dotfiles
 
   for name in $links; do
@@ -61,10 +61,12 @@ else
   fail "does not exist: ${dotfiles}"
 fi
 
-log "Checking NeoBundle"
-if [ -d "vim/bundle/neobundle.vim" ]; then
-  ok
-else
-  git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
-  echo "Run `script/neobundle` to install NeoBundle plugins."
+if which vim &> /dev/null; then
+  log "Checking NeoBundle"
+  if [[ -d "vim/bundle/neobundle.vim" ]]; then
+    ok
+  else
+    git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+    echo "Run `script/neobundle` to install NeoBundle plugins."
+  fi
 fi
