@@ -22,26 +22,25 @@ export SUBPROJECTS
 # docker
 if [[ -f /usr/local/bin/docker ]]; then
   alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
+  docker-env_home() {
+    export DOCKER_HOST=tcp://192.168.1.200:2376
+  }
+  docker-env_local() {
+    for var in $(env | grep DOCKER | cut -d= -f1); do unset $var; done
+  }
+  docker-env_minikube() {
+    data=$(minikube docker-env) && eval "$data" || return 1
+  }
   docker-env() {
     if [[ -z "$1" ]]; then
-      result=$(docker-machine active 2>&1)
-      if [[ $? -eq 1 ]]; then
-        if [[ "$DOCKER_CERT_PATH" =~ "minikube" ]]; then
-          echo minikube
-        else
-          echo mac
-        fi
-      else
-        echo $result
-      fi
-    elif [[ "$1" == "minikube" ]]; then
-      eval $(minikube docker-env)
-    elif [[ "$1" == "mac" ]]; then
-      for var in $(env | grep DOCKER | cut -d= -f1); do unset $var; done
+      echo $DOCKER_ENV
+    elif which docker-env_$1 &> /dev/null; then
+      docker-env_$1 && export DOCKER_ENV=$1
     else
-      eval "$(docker-machine env "$1")"
+      echo "unknown env: $1"
     fi
   }
+  export DOCKER_ENV=local
 fi
 
 # ag
@@ -119,6 +118,7 @@ alias b=bundle
 alias be='bundle exec'
 alias blog=hugo
 alias c=clear
+alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias ex=exercism
 alias g=gcloud
 alias gcm='git-co master'
