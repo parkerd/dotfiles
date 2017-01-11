@@ -9,9 +9,9 @@ alias vif='noglob vifind'
 alias cdf='noglob cdfind'
 
 # cross-shell profile
-if [ -f $ZDOTDIR/.profile ]; then
+if [[ -f $ZDOTDIR/.profile ]]; then
   source $ZDOTDIR/.profile
-elif [ -f ~/.profile ]; then
+elif [[ -f ~/.profile ]]; then
   source ~/.profile
 fi
 
@@ -101,8 +101,15 @@ function _pip_completion {
 compctl -K _pip_completion pip
 # pip zsh completion end
 
-# The next line updates PATH for the Google Cloud SDK.
-source '/usr/local/google-cloud-sdk/path.zsh.inc'
+if [[ -d /usr/local/google-cloud-sdk ]]; then
+  # The next line updates PATH for the Google Cloud SDK.
+  source '/usr/local/google-cloud-sdk/path.zsh.inc'
 
-# The next line enables shell command completion for gcloud.
-source '/usr/local/google-cloud-sdk/completion.zsh.inc'
+  # The next line enables shell command completion for gcloud.
+  source '/usr/local/google-cloud-sdk/completion.zsh.inc'
+fi
+
+# kubectl completion
+if which kubectl &> /dev/null; then
+  source <(kubectl completion zsh)
+fi
