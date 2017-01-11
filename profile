@@ -22,6 +22,23 @@ export SUBPROJECTS
 # docker
 if [[ -f /usr/local/bin/docker ]]; then
   alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
+
+  # Docker for Mac DNS fix
+  docker-dns() {
+    if [[ -z $1 ]]; then
+      echo "usage: $0 <dns-ip>"
+      return 1
+    fi
+    screen -dmS docker-mac ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+    screen -S docker-mac -p 0 -X stuff 'echo "nameserver '$1'" > /etc/resolv.conf
+'
+    screen -S docker-mac -X quit
+  }
+  docker-dns-google() {
+    docker-dns 8.8.8.8
+  }
+
+  # Docker env helpers
   docker-env_home() {
     export DOCKER_HOST=tcp://192.168.1.200:2376
   }
@@ -79,8 +96,9 @@ if which hub &> /dev/null; then
 fi
 
 # java
-if [ -d "/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home" ]; then
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home/
+JAVA_VERSION=1.8.0_112
+if [ -d "/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home" ]; then
+  export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home/"
   export PATH=$JAVA_HOME/bin:$PATH
 fi
 
@@ -136,6 +154,7 @@ alias ll='ls -l'
 alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
 alias mk=minikube
+alias npm-ls='npm ls -g --depth=0 2>/dev/null'
 alias path="echo \$PATH | tr ':' '\n'"
 alias pti=ptipython
 alias pvm=pyenv
@@ -226,7 +245,7 @@ pyv() {
     echo "usage: $0 <version>"
     return
   fi
-  if ! pyenv versions --bare | grep "^\d" | grep -v envs | grep $version &> /dev/null; then
+  if ! pyenv versions --bare | grep "^[2-3]" | grep -v envs | grep $version &> /dev/null; then
     echo "unknown version: $version"
     return
   fi
@@ -242,23 +261,26 @@ pyv() {
 
   pyenv virtualenv $version $venv
   echo $venv > .python-version
-  pip install --upgrade pip==8.1.1
+  pip install --upgrade pip
   pip install pip-tools
 
   echo "ipython
 pip-tools
 ptpython
-pylint
+see" > dev-requirements.in
+  pip-compile dev-requirements.in
+  pip install -r dev-requirements.txt
+
+  echo "pylint
 pytest
 pytest-catchlog
 pytest-mock
 pytest-notifier
 pytest-sugar
 pytest-watch
-pytest-xdist
-see" > dev-requirements.in
-  pip-compile dev-requirements.in
-  pip install -r dev-requirements.txt
+pytest-xdist" > test-requirements.in
+  pip-compile test-requirements.in
+  pip install -r test-requirements.txt
 
   echo "[MASTER]
 errors-only=true
