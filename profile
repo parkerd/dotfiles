@@ -273,6 +273,7 @@ see" > dev-requirements.in
 
   echo "pylint
 pytest
+pytest-cache
 pytest-catchlog
 pytest-mock
 pytest-notifier
