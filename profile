@@ -164,7 +164,7 @@ alias sum='paste -sd+ - | bc'
 alias t='clear && rspec'
 alias tf=terraform
 alias tm=tmux
-alias tree='tree -a'
+alias tree='tree -a -I .git'
 alias vm=vagrant
 alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs -I % bash -c "cd % && vagrant halt"'
 alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
@@ -267,9 +267,9 @@ pyv() {
   echo "ipython
 pip-tools
 ptpython
-see" > dev-requirements.in
-  pip-compile dev-requirements.in
-  pip install -r dev-requirements.txt
+see" > requirements-dev.in
+  pip-compile requirements-dev.in
+  pip install -r requirements-dev.txt
 
   echo "pylint
 pytest
@@ -279,9 +279,9 @@ pytest-mock
 pytest-notifier
 pytest-sugar
 pytest-watch
-pytest-xdist" > test-requirements.in
-  pip-compile test-requirements.in
-  pip install -r test-requirements.txt
+pytest-xdist" > requirements-test.in
+  pip-compile requirements-test.in
+  pip install -r requirements-test.txt
 
   echo "[MASTER]
 errors-only=true
