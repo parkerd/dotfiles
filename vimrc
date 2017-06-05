@@ -208,7 +208,6 @@ nmap <silent> <leader>d :Dash<CR>
 " :Tmuxline powerline powerline
 
 " promptline.vim
-" let g:airline_theme = 'papercolor'
 let g:promptline_theme = 'airline'
 let g:promptline_preset = {
         \'a'    : [ '$(pyenv version-name | grep -v system)', '$(__pp_git_branch)'],
@@ -225,3 +224,6 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_loc_list_height = 3
 let g:syntastic_puppet_checkers = ['puppet-lint']
+
+" Always use Dockerfile filetype
+au BufRead,BufNewFile Dockerfile* set filetype=dockerfile

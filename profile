@@ -41,15 +41,30 @@ if [[ -f /usr/local/bin/docker ]]; then
   # Docker env helpers
   docker-env_home() {
     export DOCKER_HOST=tcp://192.168.1.200:2376
+    echo 'home' > $HOME/.docker-env
   }
+
   docker-env_local() {
     for var in $(env | grep DOCKER | cut -d= -f1); do unset $var; done
+    echo 'local' > $HOME/.docker-env
   }
+
   docker-env_minikube() {
     data=$(minikube docker-env) && eval "$data" || return 1
+    echo 'minikube' > $HOME/.docker-env
   }
+
   docker-env() {
+    envs=( local minikube home )
     if [[ -z "$1" ]]; then
+      for env in "${envs[@]}"; do
+        if [[ "$env" == "$DOCKER_ENV" ]]; then
+          echo "* $env"
+        else
+          echo "  $env"
+        fi
+      done
+    elif [[ "$1" == "current" ]]; then
       echo $DOCKER_ENV
     elif which docker-env_$1 &> /dev/null; then
       docker-env_$1 && export DOCKER_ENV=$1
@@ -57,7 +72,13 @@ if [[ -f /usr/local/bin/docker ]]; then
       echo "unknown env: $1"
     fi
   }
+
   export DOCKER_ENV=local
+  if [[ -f "$HOME/.docker-env" ]]; then
+    env=$(cat $HOME/.docker-env)
+    docker-env_$env
+    export DOCKER_ENV=$env
+  fi
 fi
 
 # ag
@@ -76,13 +97,9 @@ if which colordiff &> /dev/null; then
 fi
 
 # go
-if [ -d "$PROJECTS/go/default" ]; then
-  export GOPATH=$PROJECTS/go/default
-  export PATH=$GOPATH/bin:$PATH
-
-  if which go &> /dev/null; then
-    export PATH=$(go env GOROOT)/bin:$PATH
-  fi
+if which go &> /dev/null; then
+  export GOPATH=$(go env GOPATH)
+  export PATH=$(go env GOPATH)/bin:$(go env GOROOT)/bin:$PATH
 fi
 
 # git
@@ -149,6 +166,7 @@ alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++)
 alias ipy=ipython
 alias irb='irb --simple-prompt'
 alias k=kubectl
+alias kci='kubectl cluster-info'
 alias l='ls'
 alias ll='ls -l'
 alias mailhog='open "http://localhost:8025/"'
@@ -169,6 +187,7 @@ alias vm=vagrant
 alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs -I % bash -c "cd % && vagrant halt"'
 alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
 alias sudox=xsudo
+alias watch='watch --color --differences --no-title bash -l -c'
 
 # vim
 if which vim &> /dev/null; then
@@ -264,13 +283,6 @@ pyv() {
   pip install --upgrade pip
   pip install pip-tools
 
-  echo "ipython
-pip-tools
-ptpython
-see" > requirements-dev.in
-  pip-compile requirements-dev.in
-  pip install -r requirements-dev.txt
-
   echo "pylint
 pytest
 pytest-cache
@@ -281,7 +293,15 @@ pytest-sugar
 pytest-watch
 pytest-xdist" > requirements-test.in
   pip-compile requirements-test.in
-  pip install -r requirements-test.txt
+
+  echo "-r requirements-test.txt
+ipython
+pip-tools
+ptpython
+see" > requirements-dev.in
+  pip-compile requirements-dev.in
+
+  pip install -r requirements-dev.txt
 
   echo "[MASTER]
 errors-only=true
@@ -360,6 +380,54 @@ cdfind() {
 
 dash() {
   open "dash://${*}"
+}
+
+make() {
+  dir=$PWD
+  while true; do
+    if [[ -f Makefile ]] || [[ $PWD == "/" ]]; then
+      /usr/bin/make "$@"
+      break
+    else
+      cd ..
+    fi
+  done
+  cd $dir
+}
+
+kube-env() {
+  if [[ -z "$1" ]]; then
+    kubectl config get-contexts
+  else
+    kubectl config use-context $1
+  fi
+}
+
+con() {
+  echo "\e[1mdocker:\e[0m $(docker-env current)"
+  echo "\e[1mgcloud:\e[0m $(cat $HOME/.config/gcloud/active_config)"
+  echo "\e[1mkubectl:\e[0m $(kubectl config current-context)"
+}
+
+kls() {
+  kubectl get serviceaccounts,configmaps,secrets,ingresses,services,endpoints,statefulsets,daemonsets,deployments,replicasets,horizontalpodautoscalers,limitranges,networkpolicies,pods,persistentvolumeclaims,podtemplates,replicationcontrollers,resourcequotas,thirdpartyresources,jobs $@
+}
+
+kcs() {
+  kubectl get nodes,namespaces,componentstatuses $@
+}
+
+kpv() {
+  kubectl get persistentvolumes,storageclasses $@
+}
+
+khosts() {
+  if [[ "$(kubectl config current-context)" != "home" ]]; then
+    return
+  fi
+  ip=$(k describe svc/traefik-ingress-lb -n traefik-ingress | grep "^IP" | awk '{print $2}')
+  names=$(kubectl get ing --all-namespaces --no-headers=true | awk '{print $3}' | tr '\n' ' ')
+  echo "$ip $names"
 }
 
 # dayjob
