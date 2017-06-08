@@ -11,7 +11,7 @@ export VISUAL=vim
 
 export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
-SUBPROJECTS=( go rsg )
+SUBPROJECTS=( rsg )
 export SUBPROJECTS
 
 # docker-machine
@@ -97,6 +97,9 @@ if which colordiff &> /dev/null; then
 fi
 
 # go
+if [[ -d /usr/local/go ]]; then
+  export PATH=/usr/local/go/bin:$PATH
+fi
 if which go &> /dev/null; then
   export GOPATH=$(go env GOPATH)
   export PATH=$(go env GOPATH)/bin:$(go env GOROOT)/bin:$PATH
@@ -108,9 +111,10 @@ if [ -d "$HOME/.git-scripts" ]; then
 fi
 
 # hub
-if which hub &> /dev/null; then
-  alias git=hub
-fi
+# disabled due to `hub pr` command overriding `git-pr`
+#if which hub &> /dev/null; then
+#  alias git=hub
+#fi
 
 # java
 JAVA_VERSION=1.8.0_112
@@ -132,6 +136,13 @@ fi
 #fi
 
 # pyenv
+if [[ -d "$HOME/.pyenv" ]]; then
+  export PYENV_ROOT=$HOME/.pyenv
+  export PATH=$PYENV_ROOT/bin:$PATH
+fi
+if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
+  export PATH=$PYENV_ROOT/plugins/pyenv-virtualenv/bin:$PATH
+fi
 if which pyenv &> /dev/null; then
   eval "$(pyenv init -)"
 fi
@@ -188,6 +199,11 @@ alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs
 alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
 alias sudox=xsudo
 alias watch='watch --color --differences --no-title bash -l -c'
+
+# open
+if which xdg-open &> /dev/null; then
+  alias open=xdg-open
+fi
 
 # vim
 if which vim &> /dev/null; then
