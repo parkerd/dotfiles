@@ -14,17 +14,29 @@ export PROJECTS=~/projects
 SUBPROJECTS=( rsg )
 export SUBPROJECTS
 
+# dart
+if [[ -d /usr/lib/dart/bin ]]; then
+  export PATH=/usr/lib/dart/bin:$PATH
+fi
+if [[ -d ~/.pub-cache/bin ]]; then
+  export PATH=~/.pub-cache/bin:$PATH
+fi
+
 # docker-machine
 #if [[ -f /usr/local/bin/docker-machine ]]; then
   #eval "$(docker-machine env default)"
 #fi
 
 # docker
-if [[ -f /usr/local/bin/docker ]]; then
+if which docker &> /dev/null; then
   alias docker-clean='docker ps -a | egrep "Created|Exited" | cut -d" " -f1 | xargs docker rm'
 
-  # Docker for Mac DNS fix
+  # Docker DNS fix
   docker-dns() {
+    if [[ "$(uname -s)" == "Linux" ]]; then
+      echo "DOCKER_OPTS=\"$(for ip in $(nmcli dev show | grep DNS | awk '{print $2}'); do echo -n "--dns $ip "; done)\"" | sudo tee /etc/default/docker && sudo systemctl restart docker
+      return
+    fi
     if [[ -z $1 ]]; then
       echo "usage: $0 <dns-ip>"
       return 1
@@ -88,7 +100,7 @@ fi
 
 # ccat
 if which ccat &> /dev/null; then
-  alias cat="ccat --bg=dark -G Keyword=yellow -G String=brown -G Type=reset -G Literal=reset -G Tag=reset -G Plaintext=reset -G Comment=darkgray"
+  alias cat="ccat --bg=dark -G Keyword=yellow -G String=brown -G Type=reset -G Literal=reset -G Tag=reset -G Plaintext=reset -G Comment=lightgray"
 fi
 
 # colordiff
@@ -123,10 +135,15 @@ if [ -d "/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home"
   export PATH=$JAVA_HOME/bin:$PATH
 fi
 
-# npm
-if [ -d "/usr/local/share/npm" ]; then
-  export PATH=/usr/local/share/npm/bin:$PATH
-  export NODE_PATH=/usr/local/share/npm/lib/node_modules
+# n
+if which n &> /dev/null; then
+  local nodejs_version=6.11.2
+  local nodejs_bin=/usr/local/n/versions/node/${version}/bin
+  if [[ -d $nodejs_bin ]]; then
+    alias node=$nodejs_bin/node
+    alias nodejs=$nodejs_bin/node
+    alias npm=$nodejs_bin/npm
+  fi
 fi
 
 # phpbrew
@@ -164,6 +181,7 @@ alias b=bundle
 alias be='bundle exec'
 alias blog=hugo
 alias c=clear
+alias code='PYENV_VERSION=$(pyenv version-name) code'
 alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias ex=exercism
 alias g=gcloud
@@ -176,14 +194,16 @@ alias gssh="ssh -i ~/.ssh/google_compute_engine"
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
 alias ipy=ipython
 alias irb='irb --simple-prompt'
+alias kubectl='/usr/local/bin/kubectl "--context=${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
 alias k=kubectl
 alias kci='kubectl cluster-info'
 alias l='ls'
 alias ll='ls -l'
+alias ls='ls --color=auto'
 alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
 alias mk=minikube
-alias npm-ls='npm ls -g --depth=0 2>/dev/null'
+alias npm-ls='npm ls --depth=0 2>/dev/null'
 alias path="echo \$PATH | tr ':' '\n'"
 alias pti=ptipython
 alias pvm=pyenv
@@ -411,18 +431,163 @@ make() {
   cd $dir
 }
 
-kube-env() {
+vs() {
+  echo "\e[1mcode:     \e[0m v$(code --version | head -1)"
+  echo "\e[1mdocker:   \e[0m v$(docker version | grep Version | head -1 | awk '{print $2}')"
+  echo "\e[1mdrone:    \e[0m v$(drone --version | awk '{print $3}')"
+  echo "\e[1mgo:       \e[0m v$(go version | awk '{print $3}' | sed 's/go//')"
+  echo "\e[1mkubectl:  \e[0m $(kubectl version --client=true | cut -d\" -f6)"
+  echo "\e[1mminikube: \e[0m $(minikube version | awk '{print $3}')"
+  echo "\e[1mpacker:   \e[0m $(packer version | head -1 | awk '{print $2}')"
+  echo "\e[1mterraform:\e[0m $(terraform version | head -1 | awk '{print $2}')"
+  echo "\e[1mvagrant:  \e[0m v$(vagrant version | head -1 | awk '{print $3}')"
+}
+
+kube-con() {
   if [[ -z "$1" ]]; then
     kubectl config get-contexts
+    return
+  fi
+  export KUBECTL_CONTEXT=$1
+  if [[ -n "$KUBECTL_CONTEXT" && "$(/usr/local/bin/kubectl config current-context)" != "$KUBECTL_CONTEXT" ]]; then
+    kubectl config use-context $KUBECTL_CONTEXT
+  fi
+}
+
+kube-ns() {
+  local cache=$(mktemp)
+  kubectl get ns > $cache || return 1
+
+  if [[ -z "$1" ]]; then
+    local namespace=${KUBECTL_NAMESPACE:-default}
+    while read line; do
+      if [[ "$line" =~ "^NAME" ]]; then
+        echo "CURRENT\t${line}"
+      elif [[ "$line" =~ "^${namespace}\s" ]]; then
+        echo "*\t${line}"
+      else
+        echo "\t${line}"
+      fi
+    done < $cache
+    rm $cache
+  elif grep --quiet "^${1}\s" $cache; then
+    export KUBECTL_NAMESPACE=$1
+    rm $cache
   else
-    kubectl config use-context $1
+    echo "error: no namespace exists with the name: \"${1}\""
+    rm $cache
+    return 1
+  fi
+}
+
+kube-env() {
+  if [[ -z $1 ]]; then
+    echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
+    return
+  fi
+  export KUBECTL_CONTEXT=$(echo $1 | awk -F: '{print $1}')
+  export KUBECTL_NAMESPACE=$(echo $1 | awk -F: '{print $2}')
+  kubectl config use-context $KUBECTL_CONTEXT > /dev/null
+  #kube-env
+}
+
+gcloud-env() {
+  if [[ -z $1 ]]; then
+    gcloud config configurations list
+  else
+    gcloud config configurations activate $1
   fi
 }
 
 con() {
+  local gcloud_config=$(cat $HOME/.config/gcloud/active_config)
+  local gcloud_config_file=~/.config/gcloud/configurations/config_$gcloud_config
+  local gcloud_account=$(grep "^account" $gcloud_config_file | awk '{print $3}')
+  local gcloud_project=$(grep "^project" $gcloud_config_file | awk '{print $3}')
   echo "\e[1mdocker:\e[0m $(docker-env current)"
-  echo "\e[1mgcloud:\e[0m $(cat $HOME/.config/gcloud/active_config)"
+  echo "\e[1mgcloud:\e[0m ${gcloud_config} (${gcloud_account}:${gcloud_project})"
   echo "\e[1mkubectl:\e[0m $(kubectl config current-context)"
+}
+
+drun() {
+  docker run --rm -it $1 bash
+}
+
+dbash() {
+  drun $1 bash
+}
+
+golink() {
+  local repo_path=$(git remote -v | head -1 | awk '{print $2}' | cut -d@ -f2 | sed 's/.git$//' | tr ':' '/')
+  local go_path=$GOPATH/src/$repo_path
+
+  if [[ -L $go_path ]]; then
+    echo "exists: ${go_path}"
+    return
+  fi
+
+  mkdir -p $(dirname $go_path)
+  ln -s $PWD $go_path
+}
+
+gomove() {
+  if [[ -z $1 ]]; then
+    echo "usage: $0 <repo-path>"
+    return
+  fi
+
+  if [[ -z $GOPATH ]]; then
+    echo "GOPATH not defined"
+    return
+  fi
+
+  if [[ -z $PROJECTS ]]; then
+    echo "PROJECTS not defined"
+    return
+  fi
+
+  local repo_path=$1
+  local go_path=$GOPATH/src/$repo_path
+  local project_path=$PROJECTS/$(basename $go_path)
+
+  if [[ -d $go_path ]]; then
+    echo "error: exists: $go_path"
+    return
+  fi
+
+  if [[ -e $project_path ]]; then
+    mv $project_path $go_path
+  fi
+
+  mkdir -p $go_path
+  ln -s $go_path $project_path
+}
+
+goproject() {
+  if [[ -z $1 ]]; then
+    echo "usage: $0 <project>"
+    return
+  fi
+
+  local project=$1
+  local repo_path=github.com/parkerd/$project
+  local go_path=$GOPATH/src/$repo_path
+
+  if [[ -d $go_path ]]; then
+    __pp_workon $go_path
+  else
+    gomove $repo_path
+    __pp_workon $1
+    mkdir -p cmd pkg
+    if [[ ! -d .git ]]; then
+      git init .
+    fi
+  fi
+}
+
+gocov() {
+  go test -cover -coverprofile=c.out
+  go tool cover -html=c.out -o coverage.html
 }
 
 kls() {
@@ -452,10 +617,16 @@ if [ -f ~/.dayjob ]; then
 fi
 
 # reset terminal
-if [ "$TERM" != "dumb" ]; then
+if [[ "$TERM" != "dumb" || -n "$VSCODE_CLI" ]]; then
   cd
 fi
 
-if [ -d $PROJECTS/project_prompt ]; then
+if [[ -d $PROJECTS/project_prompt ]]; then
   source $PROJECTS/project_prompt/project_prompt.sh
+fi
+
+# ensure vscode terminal opens in project
+if [[ -n "$VSCODE_CLI" ]]; then
+  cd $OLDPWD
+  workon .
 fi
