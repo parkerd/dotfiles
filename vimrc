@@ -34,6 +34,7 @@ NeoBundleLazy 'kien/ctrlp.vim'
 NeoBundleLazy 'rizzatti/dash.vim'
 NeoBundleLazy 'scrooloose/nerdtree'
 " Languages
+NeoBundle 'dart-lang/dart-vim-plugin'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'hashivim/vim-terraform'
 NeoBundle 'plasticboy/vim-markdown'
@@ -44,12 +45,6 @@ NeoBundle 'solarnz/thrift.vim'
 NeoBundle 'hdima/python-syntax'
 NeoBundle 'hynek/vim-python-pep8-indent'
 NeoBundle 'tmhedberg/SimpylFold'
-"NeoBundleLazy 'davidhalter/jedi-vim'
-"NeoBundleLazy 'lambdalisue/vim-pyenv', {
-  "\ 'depends': ['davidhalter/jedi-vim'],
-  "\ 'autoload': {
-  "\   'filetypes': ['python', 'python3'],
-  "\ }}
 
 call neobundle#end()
 
@@ -134,6 +129,11 @@ if has("autocmd")
     \ endif
 endif
 
+" remove all trailing spaces on save
+if has("autocmd")
+  autocmd BufWritePre * %s/\s\+$//e
+endif
+
 " mvim settings
 if has("gui_macvim")
   set vb
@@ -210,7 +210,7 @@ nmap <silent> <leader>d :Dash<CR>
 " promptline.vim
 let g:promptline_theme = 'airline'
 let g:promptline_preset = {
-        \'a'    : [ '$(pyenv version-name | grep -v system)', '$(__pp_git_branch)'],
+        \'a'    : [ '$(kube-env | grep -v minikube:default)', '$(pyenv version-name | grep -v system)', '$(__pp_git_branch)', ],
         \'b'    : [ '$__pp_name' ],
         \'c'    : [ '$(__pp_pwd_clean || echo %~)' ],
         \'warn' : [ promptline#slices#last_exit_code() ],
