@@ -41,6 +41,7 @@ purge = !git fsck && git remote prune origin && git gc --prune=now
 re = rebase
 rmt = remote -v
 rollback = reset HEAD^
+root = rev-parse --show-toplevel
 st = status --short --branch
 sub = submodule
 undo = checkout --
