@@ -1,5 +1,6 @@
 # vi: set ft=sh :
 # zshrc
+
 # aliases
 alias curl='noglob curl'
 alias history='history 1'
@@ -112,4 +113,8 @@ fi
 # kubectl completion
 if which kubectl &> /dev/null; then
   source <(kubectl completion zsh)
+fi
+
+if [[ -f ~/.dayjob-zsh ]]; then
+  source ~/.dayjob-zsh
 fi
