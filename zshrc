@@ -118,3 +118,6 @@ fi
 if [[ -f ~/.dayjob-zsh ]]; then
   source ~/.dayjob-zsh
 fi
+
+# added by travis gem
+[ -f /home/pdebardelaben/.travis/travis.sh ] && source /home/pdebardelaben/.travis/travis.sh

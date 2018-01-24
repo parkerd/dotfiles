@@ -39,3 +39,6 @@ export HISTCONTROL=ignorespace
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 export HISTFILE=~/.bash_history
+
+# added by travis gem
+[ -f /home/pdebardelaben/.travis/travis.sh ] && source /home/pdebardelaben/.travis/travis.sh
