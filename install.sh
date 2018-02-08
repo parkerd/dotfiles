@@ -34,7 +34,6 @@ update_link() {
 # main
 if [ -d $DOTFILES ]; then
   cd $DOTFILES
-  git submodule update
 
   for name in $links; do
     update_link $name

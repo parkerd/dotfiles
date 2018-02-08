@@ -1,19 +1,8 @@
-" pathogen settings
-let g:pathogen_disabled = ['neocomplete']
-if has("lua")
-  call remove(g:pathogen_disabled, 'neocomplete')
-end
-execute pathogen#infect()
-
 " key mappings
 let mapleader = ','
 inoremap jj <Esc>
 inoremap kk <Esc>
 set pastetoggle=<F2>
-map <leader>r :NERDTreeToggle<CR>
-map <leader>f :CtrlP<CR>
-map <leader>= :Tab /=<CR>
-map <leader>- :Tab /=><CR>
 nmap <space> zz
 
 " commands
@@ -74,32 +63,4 @@ if has("autocmd")
     \ endif
 endif
 
-" mvim settings
-if has("gui_macvim")
-  set vb
-  set go=
-  set transparency=25
-  set gfn=inconsolata-dz:h14
-  colorscheme jellybeans
-  map <C-T> :vs<CR>
-endif
-
-" neocomplete
-if has("lua")
-  let g:neocomplete#enable_at_startup = 1
-  let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-  " <CR>: close popup and save indent.
-  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  function! s:my_cr_function()
-    return neocomplete#close_popup() . "\<CR>"
-    " For no inserting <CR> key.
-    return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-  endfunction
-
-  " <TAB>: completion.
-  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-endif
-
-" crontab
 autocmd filetype crontab setlocal nobackup nowritebackup
