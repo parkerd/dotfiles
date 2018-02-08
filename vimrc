@@ -16,7 +16,8 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 " Visual
 NeoBundle 'bling/vim-airline'
-NeoBundleFetch 'edkolev/tmuxline.vim'
+NeoBundle 'vim-airline/vim-airline-themes'
+NeoBundle 'edkolev/tmuxline.vim'
 NeoBundle 'edkolev/promptline.vim'
 " Usability
 NeoBundle 'airblade/vim-gitgutter'

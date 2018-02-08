@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-echo "==> Installing NeoBundle Plugins..."
+echo "==> Installing NeoBundle plugins..."
 vim +NeoBundleInstall +qall
+echo "    OK"
+
+echo "==> Checking for updates..."
+vim +NeoBundleCheckUpdate +qall
 echo "    OK"
