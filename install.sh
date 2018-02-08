@@ -20,6 +20,9 @@ update_link() {
   filepath=$DOTFILES/$1
 
   if [ ! -e $dotfile ]; then
+    if [ -L $dotfile ]; then
+      rm $dotfile
+    fi
     create_link $dotfile $filepath
   elif [ -L $dotfile ]; then
     if [ $(readlink $dotfile | grep -c $DOTFILES) -eq 0 ]; then
