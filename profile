@@ -6,12 +6,13 @@ export EDITOR=vim
 export JRUBY_OPTS=--1.9
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+export PYTHON_CONFIGURE_OPTS="--enable-shared"
 export PYTHONDONTWRITEBYTECODE=1
 export VISUAL=vim
 
 export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
-SUBPROJECTS=( rsg )
+SUBPROJECTS=( course rsg )
 export SUBPROJECTS
 
 # dart
@@ -34,7 +35,12 @@ if which docker &> /dev/null; then
   # Docker DNS fix
   docker-dns() {
     if [[ "$(uname -s)" == "Linux" ]]; then
-      echo "DOCKER_OPTS=\"$(for ip in $(nmcli dev show | grep DNS | awk '{print $2}'); do echo -n "--dns $ip "; done)\"" | sudo tee /etc/default/docker && sudo systemctl restart docker
+      if [[ -z $1 ]]; then
+        local docker_dns=$(for ip in $(nmcli dev show | grep DNS | awk '{print $2}'); do echo -n "--dns $ip "; done)
+      else
+        local docker_dns="--dns ${1}"
+      fi
+      echo "DOCKER_OPTS=\"$docker_dns\"" | sudo tee /etc/default/docker && sudo systemctl restart docker
       return
     fi
     if [[ -z $1 ]]; then
@@ -137,13 +143,9 @@ fi
 
 # n
 if which n &> /dev/null; then
-  local nodejs_version=6.11.2
-  local nodejs_bin=/usr/local/n/versions/node/${version}/bin
-  if [[ -d $nodejs_bin ]]; then
-    alias node=$nodejs_bin/node
-    alias nodejs=$nodejs_bin/node
-    alias npm=$nodejs_bin/npm
-  fi
+  export NODE_VERSIONS=/usr/local/n/versions/node
+  export NODE_VERSION_PREFIX=
+  n 8.9.4 # lts
 fi
 
 # phpbrew
@@ -319,15 +321,18 @@ pyv() {
   pip install --upgrade pip
   pip install pip-tools
 
-  echo "pylint
+  echo "isort
+pre-commit
+pylint
 pytest
 pytest-cache
-pytest-catchlog
+pytest-cov
 pytest-mock
 pytest-notifier
 pytest-sugar
 pytest-watch
-pytest-xdist" > requirements-test.in
+pytest-xdist
+yapf" > requirements-test.in
   pip-compile requirements-test.in
 
   echo "-r requirements-test.txt
@@ -510,7 +515,7 @@ con() {
 }
 
 drun() {
-  docker run --rm -it $1 bash
+  docker run --rm -it $@
 }
 
 dbash() {
@@ -518,12 +523,12 @@ dbash() {
 }
 
 golink() {
-  local repo_path=$(git remote -v | head -1 | awk '{print $2}' | cut -d@ -f2 | sed 's/.git$//' | tr ':' '/')
+  local repo_path=$(git remote -v | head -1 | awk '{print $2}' | cut -d@ -f2 | sed 's/^https:\/\///' | sed 's/.git$//' | tr ':' '/')
   local go_path=$GOPATH/src/$repo_path
 
-  if [[ -L $go_path ]]; then
-    echo "exists: ${go_path}"
-    return
+  if [[ -e $go_path ]]; then
+    echo "error: exists: ${go_path}"
+    return 1
   fi
 
   mkdir -p $(dirname $go_path)
@@ -537,26 +542,31 @@ gomove() {
   fi
 
   if [[ -z $GOPATH ]]; then
-    echo "GOPATH not defined"
-    return
+    echo "error: GOPATH not defined"
+    return 1
   fi
 
   if [[ -z $PROJECTS ]]; then
-    echo "PROJECTS not defined"
-    return
+    echo "error: PROJECTS not defined"
+    return 1
   fi
 
   local repo_path=$1
   local go_path=$GOPATH/src/$repo_path
-  local project_path=$PROJECTS/$(basename $go_path)
+  local project_path=$PROJECTS/${2:-.}/$(basename $go_path)
 
-  if [[ -d $go_path ]]; then
+  if [[ -L $go_path ]]; then
+    rm $go_path
+  elif [[ -d $go_path ]]; then
     echo "error: exists: $go_path"
-    return
+    return 1
   fi
 
   if [[ -e $project_path ]]; then
     mv $project_path $go_path
+  else
+    echo "error: missing: $project_path"
+    return 1
   fi
 
   mkdir -p $go_path
@@ -629,4 +639,6 @@ fi
 if [[ -n "$VSCODE_CLI" ]]; then
   cd $OLDPWD
   workon .
+  export DIRENV_LOG_FORMAT=
+  test -f .envrc && direnv reload
 fi

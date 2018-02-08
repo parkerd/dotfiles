@@ -214,7 +214,7 @@ let g:promptline_preset = {
 	  \"$(docker-env | grep '^*' | grep -v local | awk '{print $2}')",
 	  \'$(kube-env | grep -v minikube:default)',
 	  \'$(pyenv version-name | grep -v system)',
-	  \'$(node --version | grep -v v8.9.1)',
+	  \'$(node --version | grep -v v8.9.4)',
 	  \'$(__pp_git_branch)',
 	\],
         \'b'    : [ '$__pp_name' ],

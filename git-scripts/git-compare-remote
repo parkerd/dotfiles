@@ -20,20 +20,18 @@ else
 fi
 
 if [ -z $3 ]; then
-  branch=$(git rev-parse --abbrev-ref HEAD)
+  ref=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
 else
-  branch=$3
+  ref=$remote/$3
 fi
-
-git fetch $remote
 
 case $method in
   in)
-    git ls-remote --exit-code ./. refs/remotes/$remote/$branch &>/dev/null
+    git ls-remote --exit-code ./. refs/remotes/$ref &>/dev/null
     if [ $? -eq 0 ]; then
-      git log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --reverse HEAD..$remote/$branch
+      git log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --reverse HEAD..$ref
     else
-      echo "Remote branch does not exist: $remote/$branch"
+      echo "Remote branch does not exist: $ref"
       exit 1
     fi
     ;;
