@@ -219,9 +219,9 @@ let g:promptline_preset = {
 	  \'$(__pp_git_branch)',
 	\],
         \'b'    : [ '$__pp_name' ],
-        \'c'    : [ '$(__pp_pwd_clean || echo %~)' ],
+        \'c'    : [ '$(__pp_pwd_clean)' ],
         \'warn' : [ promptline#slices#last_exit_code() ],
-        \'z'    : [ promptline#slices#host() ]
+        \'z'    : [ ]
     \}
 
 " syntastic
