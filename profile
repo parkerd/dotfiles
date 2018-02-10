@@ -34,6 +34,9 @@ if which docker &> /dev/null; then
 
   # Docker DNS fix
   docker-dns() {
+    #
+    # Restart local docker using current DNS.
+    #
     if [[ "$(uname -s)" == "Linux" ]]; then
       if [[ -z $1 ]]; then
         local docker_dns=$(for ip in $(nmcli dev show | grep DNS | awk '{print $2}'); do echo -n "--dns $ip "; done)
@@ -53,26 +56,32 @@ if which docker &> /dev/null; then
     screen -S docker-mac -X quit
   }
   docker-dns-google() {
+    #
+    # Restart local docker using Google DNS.
+    #
     docker-dns 8.8.8.8
   }
 
   # Docker env helpers
-  docker-env_home() {
+  _docker-env_home() {
     export DOCKER_HOST=tcp://192.168.1.200:2376
     echo 'home' > $HOME/.docker-env
   }
 
-  docker-env_local() {
+  _docker-env_local() {
     for var in $(env | grep DOCKER | cut -d= -f1); do unset $var; done
     echo 'local' > $HOME/.docker-env
   }
 
-  docker-env_minikube() {
+  _docker-env_minikube() {
     data=$(minikube docker-env) && eval "$data" || return 1
     echo 'minikube' > $HOME/.docker-env
   }
 
   docker-env() {
+    #
+    # Manage docker environment.
+    #
     envs=( local minikube home )
     if [[ -z "$1" ]]; then
       for env in "${envs[@]}"; do
@@ -84,8 +93,8 @@ if which docker &> /dev/null; then
       done
     elif [[ "$1" == "current" ]]; then
       echo $DOCKER_ENV
-    elif which docker-env_$1 &> /dev/null; then
-      docker-env_$1 && export DOCKER_ENV=$1
+    elif which _docker-env_$1 &> /dev/null; then
+      _docker-env_$1 && export DOCKER_ENV=$1
     else
       echo "unknown env: $1"
     fi
@@ -94,7 +103,7 @@ if which docker &> /dev/null; then
   export DOCKER_ENV=local
   if [[ -f "$HOME/.docker-env" ]]; then
     env=$(cat $HOME/.docker-env)
-    docker-env_$env
+    _docker-env_$env
     export DOCKER_ENV=$env
   fi
 fi
@@ -167,14 +176,19 @@ if which pyenv &> /dev/null; then
 fi
 
 # scala
-if [ -d "/usr/local/opt/scala210/bin" ]; then
+if [[ -d "/usr/local/opt/scala210/bin" ]]; then
   export PATH=/usr/local/opt/scala210/bin:$PATH
 fi
 
 # rvm
-if [ -d "$HOME/.rvm" ]; then
+if [[ -d "$HOME/.rvm" ]]; then
   export PATH=$HOME/.rvm/bin:$PATH
   source ~/.rvm/scripts/rvm
+fi
+
+# travis
+if [[ -f "$HOME/.travis/travis.sh" ]]; then
+  source $HOME/.travis/travis.sh
 fi
 
 # alias
@@ -233,14 +247,27 @@ if which vim &> /dev/null; then
 fi
 
 # ssh-copy-id for mac
-if ! which ssh-copy-id &> /dev/null; then
-  ssh-copy-id() {
-    cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
-  }
-fi
+#if ! which ssh-copy-id &> /dev/null; then
+#  ssh-copy-id() {
+#    cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
+#  }
+#fi
 
-# grep all history
+# custom functions
+help() {
+  #
+  # Show custom functions with docstring.
+  #
+  target=~/.profile
+  for func in $(grep "() {" $target | awk '{print $1}' | grep -v "^_" | grep "()" | sort); do
+    printf "%35s %s\n" "${func%\(\)}" "$(egrep -A4 "^\s*$func\(\)" $target | grep "#" | cut -d\# -f2 | awk NF)"
+  done
+}
+
 hgrep() {
+  #
+  # Grep all history.
+  #
   if [ -n "$ZSH_VERSION" ]; then
     history 1 | grep $@
   else
@@ -248,8 +275,10 @@ hgrep() {
   fi
 }
 
-# monitor the current directory for changes and execute a given command
 monitor() {
+  #
+  # Monitor the current directory for changes and execute a given command.
+  #
   command=$@
   hash1=''
   findsum='find . -type f -exec md5 {} \; | md5'
@@ -265,8 +294,10 @@ monitor() {
   done
 }
 
-# rvmrc - create .ruby-version and .ruby-gemset
 rvmrc() {
+  #
+  # Create .ruby-version and .ruby-gemset.
+  #
   if [[ "$1" == "help" ]]; then
     echo 'usage: rvmrc [version] [gemset]'
   elif [ -f .ruby-version -o -f .ruby-gemset ]; then
@@ -290,8 +321,10 @@ rvmrc() {
   rvm current
 }
 
-# pyv - setup pyenv virtualenv
 pyv() {
+  #
+  # Setup pyenv virtualenv.
+  #
   version=$1
   venv=$(basename $PWD)-$version
   if ! which pyenv &> /dev/null; then
@@ -356,9 +389,11 @@ disable=no-member,invalid-sequence-index
   pip freeze
 }
 
-# json api
-curl_json() {
-  curl -s $1 -H "Content-type: application/json" "$@" | python -mjson.tool
+curl-json() {
+  #
+  # Curl json to jq.
+  #
+  curl -s $1 -H "Content-type: application/json" "$@" | jq .
 }
 
 alias get='curl_json -XGET'
@@ -397,8 +432,10 @@ _find() {
   fi
 }
 
-# vifind - find a file and open to edit
 vifind() {
+  #
+  # Find a file and open in vim.
+  #
   if [[ -z "$1" ]]; then
     echo 'usage: vif <name> [num]'
     return
@@ -410,8 +447,10 @@ vifind() {
   fi
 }
 
-# cdfind - find a directory and cd to it
 cdfind() {
+  #
+  # Find a directory and cd to it.
+  #
   if [ -z "$1" ]; then
     echo 'usage: cdf <name> [num]'
     return
@@ -420,10 +459,16 @@ cdfind() {
 }
 
 dash() {
+  #
+  # Search dash for a topic.
+  #
   open "dash://${*}"
 }
 
 make() {
+  #
+  # Find Makefile searching recursively.
+  #
   dir=$PWD
   while true; do
     if [[ -f Makefile ]] || [[ $PWD == "/" ]]; then
@@ -437,6 +482,9 @@ make() {
 }
 
 vs() {
+  #
+  # Show current version for commonly used tools.
+  #
   echo "\e[1mcode:     \e[0m v$(code --version | head -1)"
   echo "\e[1mdocker:   \e[0m v$(docker version | grep Version | head -1 | awk '{print $2}')"
   echo "\e[1mdrone:    \e[0m v$(drone --version | awk '{print $3}')"
@@ -449,6 +497,9 @@ vs() {
 }
 
 kube-con() {
+  #
+  # Manage kubectl context.
+  #
   if [[ -z "$1" ]]; then
     kubectl config get-contexts
     return
@@ -460,6 +511,9 @@ kube-con() {
 }
 
 kube-ns() {
+  #
+  # Manage kubectl namespace.
+  #
   local cache=$(mktemp)
   kubectl get ns > $cache || return 1
 
@@ -486,6 +540,9 @@ kube-ns() {
 }
 
 kube-env() {
+  #
+  # Manage kubectl context:namespace.
+  #
   if [[ -z $1 ]]; then
     echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
     return
@@ -497,6 +554,9 @@ kube-env() {
 }
 
 gcloud-env() {
+  #
+  # Manage gcloud configuration.
+  #
   if [[ -z $1 ]]; then
     gcloud config configurations list
   else
@@ -505,6 +565,9 @@ gcloud-env() {
 }
 
 con() {
+  #
+  # Show current context for docker, gcloud, kubectl.
+  #
   local gcloud_config=$(cat $HOME/.config/gcloud/active_config)
   local gcloud_config_file=~/.config/gcloud/configurations/config_$gcloud_config
   local gcloud_account=$(grep "^account" $gcloud_config_file | awk '{print $3}')
@@ -515,14 +578,23 @@ con() {
 }
 
 drun() {
+  #
+  # Run ephemeral docker container running specified command.
+  #
   docker run --rm -it $@
 }
 
 dbash() {
+  #
+  # Run ephemeral docker container running bash.
+  #
   drun $1 bash
 }
 
 golink() {
+  #
+  # Link current repo under GOPATH.
+  #
   local repo_path=$(git remote -v | head -1 | awk '{print $2}' | cut -d@ -f2 | sed 's/^https:\/\///' | sed 's/.git$//' | tr ':' '/')
   local go_path=$GOPATH/src/$repo_path
 
@@ -536,6 +608,9 @@ golink() {
 }
 
 gomove() {
+  #
+  # Move current repo to GOPATH and create a symlink.
+  #
   if [[ -z $1 ]]; then
     echo "usage: $0 <repo-path>"
     return
@@ -574,6 +649,9 @@ gomove() {
 }
 
 goproject() {
+  #
+  # Workon integration for projects in GOPATH.
+  #
   if [[ -z $1 ]]; then
     echo "usage: $0 <project>"
     return
@@ -596,24 +674,40 @@ goproject() {
 }
 
 gocov() {
+  #
+  # Run go tests with coverage output.
+  #
   go test -cover -coverprofile=c.out
   go tool cover -html=c.out -o coverage.html
 }
 
 kls() {
+  #
+  # Show all resources in current namespace.
+  #
   kubectl get serviceaccounts,configmaps,secrets,ingresses,services,endpoints,statefulsets,daemonsets,deployments,replicasets,horizontalpodautoscalers,limitranges,networkpolicies,pods,persistentvolumeclaims,podtemplates,replicationcontrollers,resourcequotas,thirdpartyresources,jobs $@
 }
 
 kcs() {
+  #
+  # Show all cluster resources.
+  #
   kubectl get nodes,namespaces,componentstatuses $@
 }
 
 kpv() {
+  #
+  # Show all storage resources.
+  #
   kubectl get persistentvolumes,storageclasses $@
 }
 
 khosts() {
+  #
+  # Generate /etc/hosts entries for local traefik.
+  #
   if [[ "$(kubectl config current-context)" != "home" ]]; then
+    echo "only supported on 'home' context" 1>&2
     return
   fi
   ip=$(k describe svc/traefik-ingress-lb -n traefik-ingress | grep "^IP" | awk '{print $2}')
