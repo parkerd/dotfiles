@@ -14,6 +14,8 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 " Let NeoBundle manage NeoBundle
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
+" General
+NeoBundle 'editorconfig/editorconfig-vim'
 " Visual
 NeoBundle 'bling/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
@@ -74,6 +76,7 @@ nmap <space> zz
 " commands
 command Q :q
 command W :w %
+command Wq :wq %
 command WW :w !sudo tee % >/dev/null
 
 " general settings
@@ -221,7 +224,7 @@ let g:promptline_preset = {
         \'b'    : [ '$__pp_name' ],
         \'c'    : [ '$(__pp_pwd_clean)' ],
         \'warn' : [ promptline#slices#last_exit_code() ],
-        \'z'    : [ ]
+        \'z'    : [ promptline#slices#host({ 'only_if_ssh': 1 }) ]
     \}
 
 " syntastic

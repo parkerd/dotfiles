@@ -75,6 +75,6 @@ if which vim &> /dev/null; then
   else
     mkdir -p ~/.vim/bundle
     git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
-    echo "Run `script/neobundle` to install NeoBundle plugins."
+    echo "Run `script/neobundle-install` to install NeoBundle plugins."
   fi
 fi
