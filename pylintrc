@@ -1,0 +1,7 @@
+[MASTER]
+errors-only=true
+#load-plugins=pylint_django
+#ignore=vendor,migrations
+
+[MESSAGES CONTROL]
+disable=access-member-before-definition,invalid-sequence-index,no-member

@@ -1,0 +1,39 @@
+[style]
+align_closing_bracket_with_visual_indent=True
+allow_multiline_lambdas=False
+# modified
+based_on_style=google
+blank_line_before_nested_class_or_def=False
+# modified
+coalesce_brackets=True
+# modified
+column_limit=120
+continuation_indent_width=4
+# modified
+dedent_closing_brackets=True
+i18n_comment=
+i18n_function_call=
+indent_dictionary_value=False
+indent_width=4
+# modified
+join_multiple_lines=False
+spaces_around_default_or_named_assign=False
+spaces_around_power_operator=False
+spaces_before_comment=2
+space_between_ending_comma_and_closing_bracket=True
+# modified
+split_arguments_when_comma_terminated=True
+split_before_bitwise_operator=False
+split_before_first_argument=False
+split_before_logical_operator=False
+split_before_named_assigns=True
+split_penalty_after_opening_bracket=30
+split_penalty_after_unary_operator=10000
+split_penalty_before_if_expr=0
+split_penalty_bitwise_operator=300
+split_penalty_excess_character=2600
+# modified, prevent breaking in weird places
+split_penalty_for_added_line_split=10000
+split_penalty_import_names=0
+split_penalty_logical_operator=300
+use_tabs=False

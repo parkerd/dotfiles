@@ -225,6 +225,7 @@ alias pti=ptipython
 alias pvm=pyenv
 alias r='clear && rake'
 alias redis='redis-server /usr/local/etc/redis.conf'
+alias shfix='shfmt -i 2 -ci -bn -w .'
 alias sum='paste -sd+ - | bc'
 alias t='clear && rspec'
 alias tf=terraform
@@ -262,6 +263,63 @@ help() {
   for func in $(grep "() {" $target | awk '{print $1}' | grep -v "^_" | grep "()" | sort); do
     printf "%35s %s\n" "${func%\(\)}" "$(egrep -A4 "^\s*$func\(\)" $target | grep "#" | cut -d\# -f2 | awk NF)"
   done
+}
+
+pclone() {
+  #
+  # Clone a project and workon it.
+  #
+  if [[ -z $1 ]]; then
+    echo "usage: $0 <url> [name]"
+    return
+  fi
+
+  if [[ -z $PROJECTS ]]; then
+    echo "error: PROJECTS not defined"
+    return 1
+  fi
+
+  cd $PROJECTS
+  git clone $*
+
+  if [[ -n $2 ]]; then
+    workon $2
+  else
+    workon $(echo $1 | cut -d/ -f2 | sed 's|\.git$||')
+  fi
+}
+
+pyfmt() {
+  #
+  # Format Python code using isort and yapf.
+  #
+  if [[ -z $1 ]]; then
+    echo "usage: $0 <file> [file...]"
+    return
+  fi
+
+  if ! pyenv which isort &> /dev/null; then
+    echo "error: isort not found"
+    return 1
+  fi
+
+  if ! pyenv which yapf &> /dev/null; then
+    echo "error: yapf not found"
+    return 1
+  fi
+
+  local skip_paths=(fixtures migrations __pycache__)
+
+  local run_isort="isort --recursive --quiet --apply"
+  local run_yapf="yapf --parallel --recursive --in-place"
+
+  for skip_path in "${skip_paths[@]}"; do
+    run_isort="${run_isort} --skip-glob \"*${skip_path}*\""
+    run_yapf="${run_yapf} --exclude \"*${skip_path}*\""
+  done
+
+  eval "$run_isort $*"
+  eval "$run_yapf $*"
 }
 
 hgrep() {
@@ -354,7 +412,8 @@ pyv() {
   pip install --upgrade pip
   pip install pip-tools
 
-  echo "isort
+  echo "-r requirements.txt
+isort
 pre-commit
 pylint
 pytest
@@ -515,6 +574,15 @@ kube-ns() {
   # Manage kubectl namespace.
   #
   local cache=$(mktemp)
+  local error=0
+
+  if [[ "$(kubectl config current-context)" == "minikube" ]]; then
+    if ! minikube status --format "{{.MinikubeStatus}}" | grep Started &> /dev/null; then
+      echo "error: minikube not running"
+      return 1
+    fi
+  fi
+
   kubectl get ns > $cache || return 1
 
   if [[ -z "$1" ]]; then
@@ -528,15 +596,15 @@ kube-ns() {
         echo "\t${line}"
       fi
     done < $cache
-    rm $cache
   elif grep --quiet "^${1}\s" $cache; then
     export KUBECTL_NAMESPACE=$1
-    rm $cache
   else
     echo "error: no namespace exists with the name: \"${1}\""
-    rm $cache
-    return 1
+    error=1
   fi
+
+  rm $cache
+  return $error
 }
 
 kube-env() {
@@ -574,7 +642,7 @@ con() {
   local gcloud_project=$(grep "^project" $gcloud_config_file | awk '{print $3}')
   echo "\e[1mdocker:\e[0m $(docker-env current)"
   echo "\e[1mgcloud:\e[0m ${gcloud_config} (${gcloud_account}:${gcloud_project})"
-  echo "\e[1mkubectl:\e[0m $(kubectl config current-context)"
+  echo "\e[1mkubectl:\e[0m $(kube-env)"
 }
 
 drun() {
@@ -685,7 +753,7 @@ kls() {
   #
   # Show all resources in current namespace.
   #
-  kubectl get serviceaccounts,configmaps,secrets,ingresses,services,endpoints,statefulsets,daemonsets,deployments,replicasets,horizontalpodautoscalers,limitranges,networkpolicies,pods,persistentvolumeclaims,podtemplates,replicationcontrollers,resourcequotas,thirdpartyresources,jobs $@
+  kubectl get serviceaccounts,configmaps,secrets,ingresses,services,endpoints,statefulsets,daemonsets,deployments,replicasets,horizontalpodautoscalers,limitranges,networkpolicies,pods,persistentvolumeclaims,podtemplates,replicationcontrollers,resourcequotas,jobs $@
 }
 
 kcs() {
