@@ -207,6 +207,7 @@ alias gst='git st'
 alias grep='grep --color'
 alias Grep='grep'
 alias gssh="ssh -i ~/.ssh/google_compute_engine"
+alias hgrep='history | grep'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
 alias ipy=ipython
 alias irb='irb --simple-prompt'
@@ -280,13 +281,19 @@ pclone() {
   fi
 
   cd $PROJECTS
-  git clone $*
 
+  local project_path
   if [[ -n $2 ]]; then
-    workon $2
+    project_path=$2
   else
-    workon $(echo $1 | cut -d/ -f2 | sed 's|\.git$||')
+    project_path=$(echo $1 | cut -d/ -f2 | sed 's|\.git$||')
   fi
+
+  if [[ ! -d $project_path ]]; then
+    git clone $* $project_path
+  fi
+
+  eval workon $project_path
 }
 
 pyfmt() {
@@ -320,17 +327,6 @@ pyfmt() {
 
   eval "$run_isort $*"
   eval "$run_yapf $*"
-}
-
-hgrep() {
-  #
-  # Grep all history.
-  #
-  if [ -n "$ZSH_VERSION" ]; then
-    history 1 | grep $@
-  else
-    history | grep $@
-  fi
 }
 
 monitor() {
