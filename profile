@@ -1,4 +1,4 @@
-# vi: set ft=sh :
+#!/usr/bin/env bash
 # profile
 # variables
 export CLICOLOR=1
@@ -282,6 +282,7 @@ pclone() {
 
   cd $PROJECTS
 
+  # determine destination path
   local project_path
   if [[ -n $2 ]]; then
     project_path=$2
@@ -289,8 +290,15 @@ pclone() {
     project_path=$(echo $1 | cut -d/ -f2 | sed 's|\.git$||')
   fi
 
+  # if destination is a subproject, nest under
+  if [[ -n $SUBPROJECTS ]]; then
+    if [[ "${SUBPROJECTS[@]}" =~ "${project_path}" ]]; then
+      project_path="${project_path}/$(echo $1 | cut -d/ -f2 | sed 's|\.git$||')"
+    fi
+  fi
+
   if [[ ! -d $project_path ]]; then
-    git clone $* $project_path
+    git clone $1 $project_path
   fi
 
   eval workon $project_path
@@ -573,7 +581,7 @@ kube-ns() {
   local error=0
 
   if [[ "$(kubectl config current-context)" == "minikube" ]]; then
-    if ! minikube status --format "{{.MinikubeStatus}}" | grep Started &> /dev/null; then
+    if ! minikube status --format "{{.MinikubeStatus}}" | grep Running &> /dev/null; then
       echo "error: minikube not running"
       return 1
     fi
@@ -779,8 +787,43 @@ khosts() {
   echo "$ip $names"
 }
 
+pocket() {
+  #
+  # Interact with Pocket.
+  #
+  local pocket_index=~/.pocket-index
+
+  if ! which pocket-cli &>/dev/null; then
+    echo "error: requires pocket-cli"
+    exit 1
+  fi
+
+  if [[ ! -f $pocket_index ]]; then
+    pocket-cli fetch
+  fi
+
+  case $1 in
+    fetch)
+      pocket-cli fetch
+      ;;
+    list)
+      LC_ALL=C sort -k3 -t, -n $pocket_index | awk -F, '{print "\033[1;34m"$5"\033[0m\n  "$1}'
+      ;;
+    search)
+      if [[ -z $2 ]]; then
+        echo "usage: $0 search <query>"
+      fi
+      grep -i $2 $pocket_index \
+        | LC_ALL=C sort -k3 -t, -n | awk -F, '{print "\033[1;34m"$5"\033[0m\n  "$1}'
+      ;;
+    *)
+      echo "usage: $0 <fetch|list|search>"
+      ;;
+  esac
+}
+
 # dayjob
-if [ -f ~/.dayjob ]; then
+if [[ -f ~/.dayjob ]]; then
   source ~/.dayjob
 fi
 

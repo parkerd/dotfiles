@@ -1,5 +1,27 @@
-# vi: set ft=sh :
 # zshrc
+
+# debug how long zsh takes to load
+start_time=$(date +%s%3N)
+debug_timing() {
+  if [[ $DEBUG_TIMING ]]; then
+    local diff=$(($(($start_time-$(date +%s%3N)))*-1))
+    echo "${diff} - ${1}"
+  fi
+}
+alias profile-zsh='DEBUG_TIMING=1 zsh -i -c "uptime >/dev/null"'
+
+debug_timing 'start'
+debug_timing 'profile start'
+
+# cross-shell profile
+if [[ -f $ZDOTDIR/.profile ]]; then
+  source $ZDOTDIR/.profile
+elif [[ -f ~/.profile ]]; then
+  source ~/.profile
+fi
+
+debug_timing 'profile done'
+debug_timing 'zshrc start'
 
 # aliases
 alias curl='noglob curl'
@@ -8,13 +30,6 @@ alias rake='noglob rake'
 alias root='sudo ZDOTDIR=$HOME zsh'
 alias vif='noglob vifind'
 alias cdf='noglob cdfind'
-
-# cross-shell profile
-if [[ -f $ZDOTDIR/.profile ]]; then
-  source $ZDOTDIR/.profile
-elif [[ -f ~/.profile ]]; then
-  source ~/.profile
-fi
 
 # direnv
 if which direnv &> /dev/null; then
@@ -90,6 +105,9 @@ if [[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
+debug_timing 'zshrc done'
+debug_timing 'completion start'
+
 # pip zsh completion start
 function _pip_completion {
   local words cword
@@ -103,18 +121,32 @@ compctl -K _pip_completion pip
 # pip zsh completion end
 
 if [[ -d /usr/local/google-cloud-sdk ]]; then
-  # The next line updates PATH for the Google Cloud SDK.
   source '/usr/local/google-cloud-sdk/path.zsh.inc'
-
-  # The next line enables shell command completion for gcloud.
   source '/usr/local/google-cloud-sdk/completion.zsh.inc'
 fi
 
 # kubectl completion
-if which kubectl &> /dev/null; then
-  source <(kubectl completion zsh)
+if which kubectl &>/dev/null; then
+  local kubectl_completion_cache=/tmp/zsh-completion-kubectl
+  if [[ ! -f $kubectl_completion_cache ]]; then
+    kubectl completion zsh > $kubectl_completion_cache
+  fi
+  source $kubectl_completion_cache
 fi
+
+# minikube completion
+if which minikube &>/dev/null; then
+  local minikube_completion_cache=/tmp/zsh-completion-minikube
+  if [[ ! -f $minikube_completion_cache ]]; then
+    minikube completion zsh > $minikube_completion_cache
+  fi
+  source $minikube_completion_cache
+fi
+
+debug_timing 'completion done'
 
 if [[ -f ~/.dayjob-zsh ]]; then
   source ~/.dayjob-zsh
 fi
+
+debug_timing 'done'
