@@ -452,7 +452,7 @@ disable=no-member,invalid-sequence-index
   pip freeze
 }
 
-curl-json() {
+cjq() {
   #
   # Curl json to jq.
   #
