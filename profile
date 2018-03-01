@@ -456,7 +456,14 @@ cjq() {
   #
   # Curl json to jq.
   #
-  curl -s $1 -H "Content-type: application/json" "$@" | jq .
+  result=$(curl -sSL -H "Content-type: application/json" "$*")
+  rval=$?
+  if [[ $rval -eq 0 ]]; then
+    jq . <<< "$result"
+  else
+    echo "$result" 1>&2
+    return $rval
+  fi
 }
 
 alias get='curl_json -XGET'
