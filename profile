@@ -262,7 +262,7 @@ help() {
   #
   target=~/.profile
   for func in $(grep "() {" $target | awk '{print $1}' | grep -v "^_" | grep "()" | sort); do
-    printf "%35s %s\n" "${func%\(\)}" "$(egrep -A4 "^\s*$func\(\)" $target | grep "#" | cut -d\# -f2 | awk NF)"
+    printf "%20s %s\n" "${func%\(\)}" "$(egrep -A4 "^\s*$func\(\)" $target | grep "#" | cut -d\# -f2 | awk NF)"
   done
 }
 
