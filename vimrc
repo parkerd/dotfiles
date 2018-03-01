@@ -37,7 +37,9 @@ NeoBundleLazy 'kien/ctrlp.vim'
 NeoBundleLazy 'rizzatti/dash.vim'
 NeoBundleLazy 'scrooloose/nerdtree'
 " Languages
+NeoBundle 'cespare/vim-toml'
 NeoBundle 'dart-lang/dart-vim-plugin'
+NeoBundle 'elzr/vim-json'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'hashivim/vim-terraform'
 NeoBundle 'plasticboy/vim-markdown'
@@ -104,6 +106,8 @@ colorscheme gardener
 hi NonText cterm=NONE ctermbg=233
 hi Folded cterm=NONE ctermbg=235
 hi Search cterm=NONE ctermbg=237
+hi Label cterm=NONE ctermbg=NONE ctermfg=Cyan
+"hi String cterm=NONE ctermbg=NONE ctermfg=White
 
 " crosshair
 hi CursorLine   cterm=NONE ctermbg=235
@@ -235,5 +239,5 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_loc_list_height = 3
 let g:syntastic_puppet_checkers = ['puppet-lint']
 
-" Always use Dockerfile filetype
-au BufRead,BufNewFile Dockerfile* set filetype=dockerfile
+" vim
+let g:vim_json_syntax_conceal = 0

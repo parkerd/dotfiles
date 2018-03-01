@@ -5,7 +5,6 @@ export CLICOLOR=1
 export EDITOR=vim
 export JRUBY_OPTS=--1.9
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
-export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export PYTHON_CONFIGURE_OPTS="--enable-shared"
 export PYTHONDONTWRITEBYTECODE=1
 export VISUAL=vim
@@ -198,6 +197,7 @@ alias be='bundle exec'
 alias blog=hugo
 alias c=clear
 alias code='PYENV_VERSION=$(pyenv version-name) code'
+alias dco=docker-compose
 alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias ex=exercism
 alias g=gcloud
@@ -244,7 +244,7 @@ if which xdg-open &> /dev/null; then
 fi
 
 # vim
-if which vim &> /dev/null; then
+if which vim &>/dev/null; then
   alias vi=vim
 fi
 
@@ -653,14 +653,14 @@ drun() {
   #
   # Run ephemeral docker container running specified command.
   #
-  docker run --rm -it $@
+  docker run --rm -it $*
 }
 
 dbash() {
   #
   # Run ephemeral docker container running bash.
   #
-  drun $1 bash
+  drun $* bash
 }
 
 golink() {
@@ -843,3 +843,6 @@ if [[ -n "$VSCODE_CLI" ]]; then
   export DIRENV_LOG_FORMAT=
   test -f .envrc && direnv reload
 fi
+
+# Prefer local commands
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH

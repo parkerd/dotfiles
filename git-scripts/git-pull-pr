@@ -1,0 +1,15 @@
+#!/bin/bash
+
+branch=$(git rev-parse --abbrev-ref HEAD)
+pr_num=$(echo $branch | sed 's|^PR||')
+
+if [ -z $2 ]; then
+  remote=upstream
+  if [ "$(git remote | grep -c upstream)" -lt 1 ]; then
+    remote=origin
+  fi
+else
+  remote=$2
+fi
+
+git pull $remote refs/pull/$pr_num/head

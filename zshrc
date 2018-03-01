@@ -31,6 +31,11 @@ alias root='sudo ZDOTDIR=$HOME zsh'
 alias vif='noglob vifind'
 alias cdf='noglob cdfind'
 
+# functions
+zshdebug() {
+  zsh -i -c "set -x; $*"
+}
+
 # direnv
 if which direnv &> /dev/null; then
   #export DIRENV_LOG_FORMAT=
@@ -108,7 +113,7 @@ fi
 debug_timing 'zshrc done'
 debug_timing 'completion start'
 
-# pip zsh completion start
+# pip
 function _pip_completion {
   local words cword
   read -Ac words
@@ -118,14 +123,23 @@ function _pip_completion {
              PIP_AUTO_COMPLETE=1 $words[1] ) )
 }
 compctl -K _pip_completion pip
-# pip zsh completion end
 
+# pipenv
+_pipenv() {
+  eval $(env COMMANDLINE="${words[1,$CURRENT]}" _PIPENV_COMPLETE=complete-zsh  pipenv)
+}
+if [[ "$(basename ${(%):-%x})" != "_pipenv" ]]; then
+  autoload -U compinit && compinit
+  compdef _pipenv pipenv
+fi
+
+# gcloud
 if [[ -d /usr/local/google-cloud-sdk ]]; then
   source '/usr/local/google-cloud-sdk/path.zsh.inc'
   source '/usr/local/google-cloud-sdk/completion.zsh.inc'
 fi
 
-# kubectl completion
+# kubectl
 if which kubectl &>/dev/null; then
   local kubectl_completion_cache=/tmp/zsh-completion-kubectl
   if [[ ! -f $kubectl_completion_cache ]]; then
@@ -134,7 +148,7 @@ if which kubectl &>/dev/null; then
   source $kubectl_completion_cache
 fi
 
-# minikube completion
+# minikube
 if which minikube &>/dev/null; then
   local minikube_completion_cache=/tmp/zsh-completion-minikube
   if [[ ! -f $minikube_completion_cache ]]; then
