@@ -14,6 +14,12 @@ export PROJECTS=~/projects
 SUBPROJECTS=( course rsg )
 export SUBPROJECTS
 
+
+# cargo
+if [[ -d ~/.cargo/bin ]]; then
+  export PATH=~/.cargo/bin:$PATH
+fi
+
 # dart
 if [[ -d /usr/lib/dart/bin ]]; then
   export PATH=/usr/lib/dart/bin:$PATH
@@ -153,7 +159,7 @@ fi
 if which n &> /dev/null; then
   export NODE_VERSIONS=/usr/local/n/versions/node
   export NODE_VERSION_PREFIX=
-  n 8.9.4 # lts
+  n 8.10.0 # lts
 fi
 
 # phpbrew
@@ -691,7 +697,7 @@ gomove() {
   # Move current repo to GOPATH and create a symlink.
   #
   if [[ -z $1 ]]; then
-    echo "usage: $0 <repo-path>"
+    echo "usage: $0 <repo-url> [project-prefix]"
     return
   fi
 

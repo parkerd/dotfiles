@@ -8,7 +8,7 @@ debug_timing() {
     echo "${diff} - ${1}"
   fi
 }
-alias profile-zsh='DEBUG_TIMING=1 zsh -i -c "uptime >/dev/null"'
+alias zsh-profile='DEBUG_TIMING=1 zsh -i -c "uptime >/dev/null"'
 
 debug_timing 'start'
 debug_timing 'profile start'
@@ -32,7 +32,7 @@ alias vif='noglob vifind'
 alias cdf='noglob cdfind'
 
 # functions
-zshdebug() {
+zsh-debug() {
   zsh -i -c "set -x; $*"
 }
 
@@ -137,6 +137,11 @@ fi
 if [[ -d /usr/local/google-cloud-sdk ]]; then
   source '/usr/local/google-cloud-sdk/path.zsh.inc'
   source '/usr/local/google-cloud-sdk/completion.zsh.inc'
+fi
+
+# fzf
+if [[ -f ~/.fzf.zsh ]]; then
+  source ~/.fzf.zsh
 fi
 
 # kubectl
