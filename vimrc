@@ -218,18 +218,18 @@ nmap <silent> <leader>d :Dash<CR>
 " promptline.vim
 let g:promptline_theme = 'airline'
 let g:promptline_preset = {
-        \'a'    : [
-	  \"$(docker-env | grep '^*' | grep -v local | awk '{print $2}')",
-	  \'$(kube-env | grep -v minikube:default)',
-	  \'$(pyenv version-name | grep -v system)',
-	  \'$(node --version | grep -v v8.10.0)',
-	  \'$(__pp_git_branch)',
-	\],
-        \'b'    : [ '$__pp_name' ],
-        \'c'    : [ '$(__pp_pwd_clean)' ],
-        \'warn' : [ promptline#slices#last_exit_code() ],
-        \'z'    : [ promptline#slices#host({ 'only_if_ssh': 1 }) ]
-    \}
+  \'a': [
+    \"$(docker-env | grep '^*' | grep -v local | awk '{print $2}')",
+    \'$(kube-env | grep -v minikube:default)',
+    \'$(pyenv version-name | grep -v system)',
+    \'$(node --version | grep -v v8.10.0)',
+    \'$(__pp_git_branch)',
+  \],
+  \'b': [ '$__pp_name' ],
+  \'c': [ '$(__pp_pwd_clean)' ],
+  \'warn': [ promptline#slices#last_exit_code() ],
+  \'z': [ promptline#slices#host({ 'only_if_ssh': 1 }) ]
+\}
 
 " syntastic
 let g:syntastic_always_populate_loc_list = 1

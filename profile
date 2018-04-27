@@ -516,7 +516,7 @@ vifind() {
     echo 'usage: vif <name> [num]'
     return
   fi
-  if [[ "${1: -1}" == "*" ]]; then
+  if [[ "${1:-1}" == "*" ]]; then
     _find vim f $1 $2
   else
     _find vim f "${1}*" $2
