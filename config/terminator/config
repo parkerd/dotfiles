@@ -1,0 +1,50 @@
+[global_config]
+  enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
+  extra_styling = False
+  putty_paste_style = True
+  title_font = Inconsolata-dz Medium 11
+  title_hide_sizetext = True
+  title_inactive_bg_color = "#333333"
+  title_transmit_bg_color = "#333333"
+  title_use_system_font = False
+[keybindings]
+  go_next = <Primary><Shift>f
+  new_tab = <Primary>t
+  next_tab = <Primary>f
+  prev_tab = None
+  search = <Primary>slash
+  split_horiz = <Primary><Shift>g
+  split_vert = <Primary><Shift>t
+  switch_to_tab_1 = <Alt>1
+  switch_to_tab_10 = <Alt>0
+  switch_to_tab_2 = <Alt>2
+  switch_to_tab_3 = <Alt>3
+  switch_to_tab_4 = <Alt>4
+  switch_to_tab_5 = <Alt>5
+  switch_to_tab_6 = <Alt>6
+  switch_to_tab_7 = <Alt>7
+  switch_to_tab_8 = <Alt>8
+  switch_to_tab_9 = <Alt>9
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = default
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    background_darkness = 0.72
+    background_type = transparent
+    copy_on_selection = True
+    cursor_blink = False
+    cursor_color = "#ffffff"
+    cursor_shape = ibeam
+    font = Inconsolata-dz for Powerline Medium 11
+    foreground_color = "#ffffff"
+    scrollback_infinite = True
+    show_titlebar = False
+    use_system_font = False
