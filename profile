@@ -407,7 +407,7 @@ pyv() {
     echo "unknown version: $version"
     return
   fi
-  if ! pyenv version-name | grep "^system" &> /dev/null; then
+  if ! pyenv version-name | grep "system" &> /dev/null; then
     echo "already in pyenv:"
     pyenv version
     return
@@ -419,32 +419,40 @@ pyv() {
 
   pyenv virtualenv $version $venv
   echo $venv > .python-version
-  pip install --upgrade pip
-  pip install pip-tools
+  pip install --upgrade pip pipenv
 
-  echo "-r requirements.txt
-isort
-pre-commit
-pylint
-pytest
-pytest-cache
-pytest-cov
-pytest-mock
-pytest-notifier
-pytest-sugar
-pytest-watch
-pytest-xdist
-yapf" > requirements-test.in
-  pip-compile requirements-test.in
+  echo 'export VIRTUAL_ENV=$(pyenv root)/versions/$(cat .python-version)' >> .envrc
+  direnv allow
 
-  echo "-r requirements-test.txt
-ipython
-pip-tools
-ptpython
-see" > requirements-dev.in
-  pip-compile requirements-dev.in
+  echo "[[source]]
+url = \"https://pypi.python.org/simple\"
+verify_ssl = true
+name = \"pypi\"
 
-  pip install -r requirements-dev.txt
+[packages]
+
+[dev-packages]
+ipython = "*"
+isort = "*"
+ptpython = "*"
+pre-commit = "*"
+pylint = "*"
+pytest = "*"
+pytest-cache = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pytest-notifier = "*"
+pytest-sugar = "*"
+pytest-watch = "*"
+pytest-xdist = "*"
+see = "*"
+yapf = "*"
+
+[scripts]
+" > Pipfile
+
+  pipenv lock
+  pipenv sync --dev
 
   echo "[MASTER]
 errors-only=true
