@@ -421,19 +421,25 @@ pyv() {
   echo $venv > .python-version
   pip install --upgrade pip pipenv
 
+  export VIRTUALENV=$(pyenv root)/versions/$(cat .python-version)
   echo 'export VIRTUAL_ENV=$(pyenv root)/versions/$(cat .python-version)' >> .envrc
   direnv allow
 
-  echo "[[source]]
-url = \"https://pypi.python.org/simple\"
+  cat > Pipfile <<-END
+[[source]]
+url = "https://pypi.python.org/simple"
 verify_ssl = true
-name = \"pypi\"
+name = "pypi"
+
+[requires]
+python_version = "${version}"
 
 [packages]
 
 [dev-packages]
 ipython = "*"
 isort = "*"
+pipenv = "*"
 ptpython = "*"
 pre-commit = "*"
 pylint = "*"
@@ -449,17 +455,18 @@ see = "*"
 yapf = "*"
 
 [scripts]
-" > Pipfile
+END
 
-  pipenv lock
-  pipenv sync --dev
-
-  echo "[MASTER]
+  cat > .pylintrc <<-END
+[MASTER]
 errors-only=true
 
 [MESSAGES CONTROL]
 disable=no-member,invalid-sequence-index
-" > .pylintrc
+END
+
+  pipenv lock
+  pipenv sync --dev
 
   echo
   pyenv version
@@ -573,11 +580,12 @@ vs() {
   echo "\e[1mdocker:   \e[0m v$(docker version | grep Version | head -1 | awk '{print $2}')"
   echo "\e[1mdrone:    \e[0m v$(drone --version | awk '{print $3}')"
   echo "\e[1mgo:       \e[0m v$(go version | awk '{print $3}' | sed 's/go//')"
+  echo "\e[1mgitlab:   \e[0m v$(gitlab-runner --version | head -1 | awk '{print $2}')"
   echo "\e[1mkubectl:  \e[0m $(kubectl version --client=true | cut -d\" -f6)"
   echo "\e[1mminikube: \e[0m $(minikube version | awk '{print $3}')"
   echo "\e[1mpacker:   \e[0m $(packer version | head -1 | awk '{print $2}')"
   echo "\e[1mterraform:\e[0m $(terraform version | head -1 | awk '{print $2}')"
-  echo "\e[1mvagrant:  \e[0m v$(vagrant version | head -1 | awk '{print $3}')"
+  echo "\e[1mvagrant:  \e[0m v$(vagrant --version | awk '{print $2}')"
 }
 
 kube-con() {
