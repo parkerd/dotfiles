@@ -11,7 +11,7 @@ export VISUAL=vim
 
 export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
-SUBPROJECTS=( course rsg )
+SUBPROJECTS=( course )
 export SUBPROJECTS
 
 
@@ -183,6 +183,11 @@ fi
 # scala
 if [[ -d "/usr/local/opt/scala210/bin" ]]; then
   export PATH=/usr/local/opt/scala210/bin:$PATH
+fi
+
+# rust
+if [[ -d "$HOME/.cargo" ]]; then
+  export PATH=$HOME/.cargo/bin:$PATH
 fi
 
 # rvm
@@ -855,6 +860,9 @@ pocket() {
 if [[ -f ~/.dayjob ]]; then
   source ~/.dayjob
 fi
+
+# disable scroll lock
+stty -ixon -ixoff
 
 # reset terminal
 if [[ "$TERM" != "dumb" || -n "$VSCODE_CLI" ]]; then
