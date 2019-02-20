@@ -15,6 +15,12 @@ SUBPROJECTS=( course )
 export SUBPROJECTS
 
 
+# local
+# first to prefer commands in more specific environments
+if [[ -d "$HOME/.local/bin" ]]; then
+  export PATH=$HOME/.local/bin:$PATH
+fi
+
 # cargo
 if [[ -d ~/.cargo/bin ]]; then
   export PATH=~/.cargo/bin:$PATH
@@ -138,7 +144,7 @@ if which go &> /dev/null; then
 fi
 
 # git
-if [ -d "$HOME/.git-scripts" ]; then
+if [[ -d "$HOME/.git-scripts" ]]; then
   export PATH=$HOME/.git-scripts:$PATH
 fi
 
@@ -150,7 +156,7 @@ fi
 
 # java
 JAVA_VERSION=1.8.0_112
-if [ -d "/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home" ]; then
+if [[ -d "/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home" ]]; then
   export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home/"
   export PATH=$JAVA_HOME/bin:$PATH
 fi
@@ -159,7 +165,7 @@ fi
 if which n &> /dev/null; then
   export NODE_VERSIONS=/usr/local/n/versions/node
   export NODE_VERSION_PREFIX=
-  n 8.10.0 # lts
+  n 10.13.0 # lts
 fi
 
 # phpbrew

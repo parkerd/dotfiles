@@ -144,6 +144,12 @@ if [[ -f ~/.fzf.zsh ]]; then
   source ~/.fzf.zsh
 fi
 
+# heroku
+HEROKU_AC_ZSH_SETUP_PATH=/home/pdebardelaben/.cache/heroku/autocomplete/zsh_setup
+if [[ -f $HEROKU_AC_ZSH_SETUP_PATH ]]; then
+  source $HEROKU_AC_ZSH_SETUP_PATH
+fi
+
 # kubectl
 if which kubectl &>/dev/null; then
   local kubectl_completion_cache=/tmp/zsh-completion-kubectl
@@ -161,6 +167,15 @@ if which minikube &>/dev/null; then
   fi
   source $minikube_completion_cache
 fi
+
+# rustup
+#if which rustup &>/dev/null; then
+  #local rustup_completion_cache=/tmp/zsh-completion-rustup
+  #if [[ ! -f $rustup_completion_cache ]]; then
+    #rustup completions zsh > $rustup_completion_cache
+  #fi
+  #source $rustup_completion_cache
+#fi
 
 debug_timing 'completion done'
 

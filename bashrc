@@ -24,7 +24,7 @@ if [[ $(id -u) -eq 0 ]]; then
   PS1_COLOR='\[\e[1;31m\]'
 fi
 
-if [[ -z "$SSH_CLIENT" -a -z "$SUDO_USER" ]]; then
+if [[ -z "$SSH_CLIENT" && -z "$SUDO_USER" ]]; then
     export PS1=$PS1_COLOR'\w \$ \[\e[0m\]'
 else
   if [[ -z "$MC_HOSTNAME" ]]; then
