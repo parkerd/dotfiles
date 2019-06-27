@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # profile
 # variables
+export BAT_PAGER=
 export CLICOLOR=1
 export EDITOR=vim
 export JRUBY_OPTS=--1.9
@@ -11,19 +12,18 @@ export VISUAL=vim
 
 export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
-SUBPROJECTS=( course )
+SUBPROJECTS=( course intermix )
 export SUBPROJECTS
 
+debug_timing 'profile - tooling start'
+
+# Prefer local commands
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
 # local
 # first to prefer commands in more specific environments
 if [[ -d "$HOME/.local/bin" ]]; then
   export PATH=$HOME/.local/bin:$PATH
-fi
-
-# cargo
-if [[ -d ~/.cargo/bin ]]; then
-  export PATH=~/.cargo/bin:$PATH
 fi
 
 # dart
@@ -33,11 +33,6 @@ fi
 if [[ -d ~/.pub-cache/bin ]]; then
   export PATH=~/.pub-cache/bin:$PATH
 fi
-
-# docker-machine
-#if [[ -f /usr/local/bin/docker-machine ]]; then
-  #eval "$(docker-machine env default)"
-#fi
 
 # docker
 if which docker &> /dev/null; then
@@ -165,7 +160,7 @@ fi
 if which n &> /dev/null; then
   export NODE_VERSIONS=/usr/local/n/versions/node
   export NODE_VERSION_PREFIX=
-  n 10.13.0 # lts
+  n 10.15.3 # lts
 fi
 
 # phpbrew
@@ -175,15 +170,15 @@ fi
 #fi
 
 # pyenv
-if [[ -d "$HOME/.pyenv" ]]; then
+if [[ -d "$HOME/.pyenv/bin" ]]; then
   export PYENV_ROOT=$HOME/.pyenv
-  export PATH=$PYENV_ROOT/bin:$PATH
+  if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
+    export PATH=$PYENV_ROOT/plugins/pyenv-virtualenv/bin:$PATH
+  fi
 fi
-if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
-  export PATH=$PYENV_ROOT/plugins/pyenv-virtualenv/bin:$PATH
-fi
-if which pyenv &> /dev/null; then
+if which pyenv &>/dev/null; then
   eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 fi
 
 # scala
@@ -207,18 +202,21 @@ if [[ -f "$HOME/.travis/travis.sh" ]]; then
   source $HOME/.travis/travis.sh
 fi
 
+debug_timing 'profile - tooling done'
+
 # alias
 alias atom='PYENV_VERSION=$(pyenv version-name) atom'
 alias b=bundle
 alias be='bundle exec'
 alias blog=hugo
 alias c=clear
-alias code='PYENV_VERSION=$(pyenv version-name) code'
+alias code='PYENV_VERSION=$(pyenv version-name) VSCODE=1 code'
 alias dco=docker-compose
 alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias ex=exercism
 alias g=gcloud
 alias gcm='git-co master'
+alias gcd='git-co develop'
 alias gco='git-co'
 alias gst='git st'
 alias grep='grep --color'
@@ -233,7 +231,7 @@ alias k=kubectl
 alias kci='kubectl cluster-info'
 alias l='ls'
 alias ll='ls -l'
-alias ls='ls --color=auto'
+#alias ls='ls --color=auto'
 alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
 alias mk=minikube
@@ -265,12 +263,7 @@ if which vim &>/dev/null; then
   alias vi=vim
 fi
 
-# ssh-copy-id for mac
-#if ! which ssh-copy-id &> /dev/null; then
-#  ssh-copy-id() {
-#    cat ~/.ssh/id_rsa.pub | ssh $@ "cat - >> ~/.ssh/authorized_keys && chmod 644 ~/.ssh/authorized_keys"
-#  }
-#fi
+debug_timing 'profile - functions start'
 
 # custom functions
 help() {
@@ -656,13 +649,18 @@ kube-env() {
   # Manage kubectl context:namespace.
   #
   if [[ -z $1 ]]; then
-    echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
+    if which minikube &> /dev/null; then
+      echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
+    else
+      # Use default expected for prompt
+      echo "minikube:${KUBECTL_NAMESPACE:-default}"
+    fi
     return
+  else
+    export KUBECTL_CONTEXT=$(echo $1 | awk -F: '{print $1}')
+    export KUBECTL_NAMESPACE=$(echo $1 | awk -F: '{print $2}')
+    kubectl config use-context $KUBECTL_CONTEXT > /dev/null
   fi
-  export KUBECTL_CONTEXT=$(echo $1 | awk -F: '{print $1}')
-  export KUBECTL_NAMESPACE=$(echo $1 | awk -F: '{print $2}')
-  kubectl config use-context $KUBECTL_CONTEXT > /dev/null
-  #kube-env
 }
 
 gcloud-env() {
@@ -862,16 +860,62 @@ pocket() {
   esac
 }
 
+aws-env() {
+  #
+  # Manage AWS profile.
+  #
+  local config="$HOME/.aws/config"
+  if [[ ! -f $config ]]; then
+    echo "error: not found: ${config}"
+    return 1
+  fi
+
+  local profiles=$(grep "^\[profile" ~/.aws/config \
+    | cut -d' ' -f2 \
+    | cut -d\] -f1 \
+    | sort)
+
+  local command=$1
+  case $command in
+    clear)
+      unset AWS_PROFILE
+      ;;
+    current)
+      if [[ -n "$AWS_PROFILE" ]]; then
+        echo $AWS_PROFILE
+      fi
+      ;;
+    list)
+      echo $profiles
+      ;;
+    use)
+      local profile=$2
+      if echo $profiles | grep $profile &>/dev/null; then
+        export AWS_PROFILE=$profile
+      else
+        echo "error: unknown profile: $profile"
+        return 1
+      fi
+      ;;
+    *)
+      echo "usage: $0 <clear|current|list|use>"
+      ;;
+  esac
+}
+
+debug_timing 'profile - functions done'
+debug_timing 'profile - dayjob start'
 # dayjob
 if [[ -f ~/.dayjob ]]; then
   source ~/.dayjob
 fi
+debug_timing 'profile - dayjob done'
 
 # disable scroll lock
 stty -ixon -ixoff
 
 # reset terminal
-if [[ "$TERM" != "dumb" || -n "$VSCODE_CLI" ]]; then
+if [[ "$TERM" != "dumb" || -n "$VSCODE" ]]; then
   cd
 fi
 
@@ -880,12 +924,9 @@ if [[ -d $PROJECTS/project_prompt ]]; then
 fi
 
 # ensure vscode terminal opens in project
-if [[ -n "$VSCODE_CLI" ]]; then
+if [[ -n "$VSCODE" ]]; then
   cd $OLDPWD
   workon .
   export DIRENV_LOG_FORMAT=
   test -f .envrc && direnv reload
 fi
-
-# Prefer local commands
-export PATH=/usr/local/bin:/usr/local/sbin:$PATH

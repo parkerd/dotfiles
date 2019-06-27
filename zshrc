@@ -1,10 +1,10 @@
 # zshrc
 
 # debug how long zsh takes to load
-start_time=$(date +%s%3N)
+start_time=$(gdate +%s%3N)
 debug_timing() {
   if [[ $DEBUG_TIMING ]]; then
-    local diff=$(($(($start_time-$(date +%s%3N)))*-1))
+    local diff=$(($(($start_time-$(gdate +%s%3N)))*-1))
     echo "${diff} - ${1}"
   fi
 }
@@ -37,7 +37,7 @@ zsh-debug() {
 }
 
 # direnv
-if which direnv &> /dev/null; then
+if which direnv &> /dev/null && ! which _direnv_hook &> /dev/null; then
   #export DIRENV_LOG_FORMAT=
   eval "$(direnv hook zsh)"
 fi

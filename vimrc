@@ -219,10 +219,11 @@ nmap <silent> <leader>d :Dash<CR>
 let g:promptline_theme = 'airline'
 let g:promptline_preset = {
   \'a': [
+    \'$(aws-env current)',
     \"$(docker-env | grep '^*' | grep -v local | awk '{print $2}')",
     \'$(kube-env | grep -v minikube:default)',
     \'$(pyenv version-name | grep -v system)',
-    \'$(node --version | grep -v v10.13.0)',
+    \'$(node --version | grep -v v10.15.3)',
     \'$(__pp_git_branch)',
   \],
   \'b': [ '$__pp_name' ],

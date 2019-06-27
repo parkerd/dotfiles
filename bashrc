@@ -12,6 +12,11 @@ alias cdf=cdfind
 # shopt
 shopt -s globstar
 
+# zshrc compat
+debug_timing() {
+  return
+}
+
 # cross-shell profile
 if [[ $SUDO_COMMAND == *rcfile* ]]; then
   source "$(echo $SUDO_COMMAND | awk '{print $3}' | sed 's/bashrc/profile/')"

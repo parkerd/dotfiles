@@ -32,7 +32,7 @@ lgr = log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --graph -10
 lgg = !git log --pretty=format:'%C(auto)%h%d - %an, %ar: %s' --reverse | cat
 mg = merge
 ms = merge --squash
-open = !git co master && git sync && git co -b
+#open = !git co master && git sync && git co -b
 out = compare-remote out
 pop = stash pop
 #pr = !git push -u origin HEAD && hub pull-request && git workon master
