@@ -1,10 +1,15 @@
 # zshrc
 
 # debug how long zsh takes to load
-start_time=$(gdate +%s%3N)
+if which gdate &> /dev/null; then
+  DATE_CMD=gdate
+else
+  DATE_CMD=date
+fi
+start_time=$($DATE_CMD +%s%3N)
 debug_timing() {
   if [[ $DEBUG_TIMING ]]; then
-    local diff=$(($(($start_time-$(gdate +%s%3N)))*-1))
+    local diff=$(($(($start_time-$($DATE_CMD +%s%3N)))*-1))
     echo "${diff} - ${1}"
   fi
 }
