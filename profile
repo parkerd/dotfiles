@@ -173,6 +173,7 @@ fi
 if [[ -d "$HOME/.pyenv/bin" ]]; then
   export PYENV_ROOT=$HOME/.pyenv
   if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
+    export PATH=$PYENV_ROOT/bin:$PATH
     export PATH=$PYENV_ROOT/plugins/pyenv-virtualenv/bin:$PATH
   fi
 fi
