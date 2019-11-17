@@ -157,11 +157,11 @@ if [[ -d "/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home
 fi
 
 # n
-if which n &> /dev/null; then
-  export NODE_VERSIONS=/usr/local/n/versions/node
-  export NODE_VERSION_PREFIX=
-  n 10.15.3 # lts
-fi
+#if which n &> /dev/null; then
+#  export NODE_VERSIONS=/usr/local/n/versions/node
+#  export NODE_VERSION_PREFIX=
+#  n 10.15.3 # lts
+#fi
 
 # phpbrew
 # SLOW

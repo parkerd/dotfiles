@@ -130,17 +130,10 @@ nmap <silent> <Leader>l
   \ endif<CR>
 
 " automatically return to previous position
-if has("autocmd")
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
-endif
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
 
 " remove all trailing spaces on save
-if has("autocmd")
-  autocmd BufWritePre * %s/\s\+$//e
-endif
+autocmd BufWritePre * %s/\s\+$//e
 
 " mvim settings
 if has("gui_macvim")
