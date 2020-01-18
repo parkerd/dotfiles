@@ -179,7 +179,9 @@ if [[ -d "$HOME/.pyenv/bin" ]]; then
 fi
 if which pyenv &>/dev/null; then
   eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+  if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
 fi
 
 # scala
