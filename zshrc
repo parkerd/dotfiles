@@ -1,12 +1,19 @@
 # zshrc
 
 # debug how long zsh takes to load
-if which gdate &> /dev/null; then
+if [[ "$(uname -s)" == "Darwin" ]]; then
   DATE_CMD=gdate
 else
   DATE_CMD=date
 fi
-start_time=$($DATE_CMD +%s%3N)
+if [[ $DEBUG_TIMING ]]; then
+  which $DATE_CMD &>/dev/null
+  if [[ $? -ne 0 ]]; then
+    echo "missing gdate from coreutils"
+    exit 1
+  fi
+  start_time=$($DATE_CMD +%s%3N)
+fi
 debug_timing() {
   if [[ $DEBUG_TIMING ]]; then
     local diff=$(($(($start_time-$($DATE_CMD +%s%3N)))*-1))

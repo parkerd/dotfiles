@@ -214,7 +214,8 @@ let g:promptline_preset = {
   \'a': [
     \'$(aws-env current)',
     \"$(docker-env | grep '^*' | grep -v local | awk '{print $2}')",
-    \'$(kube-env | grep -v minikube:default)',
+    \'$(kube-env | grep -v docker-desktop:default | grep -v kubectl)',
+    \'$(nvm current | grep -v system)',
     \'$(pyenv version-name | grep -v system)',
     \'$(__pp_git_branch)',
   \],

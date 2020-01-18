@@ -3,7 +3,7 @@ name = Parker DeBardelaben
 email = pdebardelaben@gmail.com
 
 [core]
-excludesfile = /home/pdebardelaben/.gitignore
+excludesfile = /Users/pdebardelaben/.gitignore
 
 [color]
 ui = true
@@ -58,3 +58,9 @@ smudge = git media smudge %f
 
 [include]
 path = ~/.gitconfig-dayjob
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

@@ -12,7 +12,7 @@ export VISUAL=vim
 
 export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
-SUBPROJECTS=( course intermix )
+SUBPROJECTS=( meeter )
 export SUBPROJECTS
 
 debug_timing 'profile - tooling start'
@@ -163,6 +163,12 @@ fi
 #  n 10.15.3 # lts
 #fi
 
+# nvm
+if [[ -d "$HOME/.nvm" ]]; then
+  export NVM_DIR=~/.nvm
+  source /usr/local/opt/nvm/nvm.sh --no-use
+fi
+
 # phpbrew
 # SLOW
 #if [ -d "$HOME/.phpbrew" ]; then
@@ -219,7 +225,7 @@ alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias ex=exercism
 alias g=gcloud
 alias gcm='git-co master'
-alias gcd='git-co develop'
+alias gcd='git-co dev'
 alias gco='git-co'
 alias gst='git st'
 alias grep='grep --color'
@@ -229,8 +235,10 @@ alias hgrep='history | grep'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
 alias ipy=ipython
 alias irb='irb --simple-prompt'
+alias js2json="node -e \"const fs = require('fs');const js = fs.readFileSync(0, 'utf-8');const data = eval(js);console.log(JSON.stringify(data))\""
 alias kubectl='/usr/local/bin/kubectl "--context=${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
 alias k=kubectl
+alias kube=kubectl
 alias kci='kubectl cluster-info'
 alias l='ls'
 alias ll='ls -l'
@@ -652,13 +660,11 @@ kube-env() {
   # Manage kubectl context:namespace.
   #
   if [[ -z $1 ]]; then
-    if which minikube &> /dev/null; then
+    if which kubectl &>/dev/null; then
       echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
     else
-      # Use default expected for prompt
-      echo "minikube:${KUBECTL_NAMESPACE:-default}"
+      echo "kubectl not found"
     fi
-    return
   else
     export KUBECTL_CONTEXT=$(echo $1 | awk -F: '{print $1}')
     export KUBECTL_NAMESPACE=$(echo $1 | awk -F: '{print $2}')
@@ -702,6 +708,13 @@ dbash() {
   # Run ephemeral docker container running bash.
   #
   drun $* bash
+}
+
+dsh() {
+  #
+  # Run ephemeral docker container running sh.
+  #
+  drun $* sh
 }
 
 golink() {
