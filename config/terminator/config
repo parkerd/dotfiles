@@ -8,6 +8,7 @@
   title_transmit_bg_color = "#333333"
   title_use_system_font = False
 [keybindings]
+  paste = <Ctrl>v
   go_next = <Primary><Shift>f
   new_tab = <Primary>t
   next_tab = <Primary>f

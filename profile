@@ -223,7 +223,7 @@ alias b=bundle
 alias be='bundle exec'
 alias blog=hugo
 alias c=clear
-alias code='PYENV_VERSION=$(pyenv version-name) VSCODE=1 code'
+#alias code='PYENV_VERSION=$(pyenv version-name) VSCODE=1 code'
 alias dco=docker-compose
 alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias ex=exercism
@@ -956,7 +956,7 @@ if [[ -d $PROJECTS/project_prompt ]]; then
 fi
 
 # ensure vscode terminal opens in project
-if [[ -n "$VSCODE" ]]; then
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
   cd $OLDPWD
   workon .
   export DIRENV_LOG_FORMAT=
