@@ -166,7 +166,11 @@ fi
 # nvm
 if [[ -d "$HOME/.nvm" ]]; then
   export NVM_DIR=~/.nvm
-  source /usr/local/opt/nvm/nvm.sh --no-use
+  if [[ -f /usr/local/opt/nvm/nvm.sh ]]; then
+    source /usr/local/opt/nvm/nvm.sh --no-use
+  elif [[ -f $NVM_DIR/nvm.sh ]]; then
+    source $NVM_DIR/nvm.sh --no-use
+  fi
 fi
 
 # phpbrew
@@ -607,10 +611,15 @@ kube-con() {
   #
   # Manage kubectl context.
   #
+  if [[ ! -f $HOME/.kube/config ]]; then
+    return
+  fi
+
   if [[ -z "$1" ]]; then
     kubectl config get-contexts
     return
   fi
+
   export KUBECTL_CONTEXT=$1
   if [[ -n "$KUBECTL_CONTEXT" && "$(/usr/local/bin/kubectl config current-context)" != "$KUBECTL_CONTEXT" ]]; then
     kubectl config use-context $KUBECTL_CONTEXT
@@ -621,6 +630,10 @@ kube-ns() {
   #
   # Manage kubectl namespace.
   #
+  if [[ ! -f $HOME/.kube/config ]]; then
+    return
+  fi
+
   local cache=$(mktemp)
   local error=0
 
@@ -659,6 +672,10 @@ kube-env() {
   #
   # Manage kubectl context:namespace.
   #
+  if [[ ! -f $HOME/.kube/config ]]; then
+    return
+  fi
+
   if [[ -z $1 ]]; then
     if which kubectl &>/dev/null; then
       echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
@@ -882,8 +899,7 @@ aws-env() {
   #
   local config="$HOME/.aws/config"
   if [[ ! -f $config ]]; then
-    echo "error: not found: ${config}"
-    return 1
+    return
   fi
 
   local profiles=$(grep "^\[profile" ~/.aws/config \
