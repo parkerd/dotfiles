@@ -246,7 +246,6 @@ alias kube=kubectl
 alias kci='kubectl cluster-info'
 alias l='ls'
 alias ll='ls -l'
-#alias ls='ls --color=auto'
 alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
 alias mk=minikube
@@ -267,6 +266,10 @@ alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs
 alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
 alias sudox=xsudo
 alias watch='watch --color --differences --no-title bash -l -c'
+
+if [[ "$(uname -s)" == "Linux" ]]; then
+  alias ls='ls --color=auto'
+fi
 
 # open
 if which xdg-open &> /dev/null; then

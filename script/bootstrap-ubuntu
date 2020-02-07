@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+set -e
+source /etc/os-release
+
+sudo apt install -y \
+  ack \
+  apt-transport-https \
+  build-essential \
+  cargo \
+  ca-certificates \
+  colordiff \
+  compizconfig-settings-manager \
+  curl \
+  direnv \
+  dconf-editor \
+  fzf \
+  git \
+  gnupg-agent \
+  libbz2-dev \
+  libclang \
+  libffi-dev \
+  libinput-tools \
+  liblzma-dev \
+  libncurses5-dev \
+  libreadline-dev \
+  libssl-dev \
+  libsqlite3-dev \
+  libxml2-dev \
+  libxmlsec1-dev \
+  llvm \
+  make \
+  net-tools \
+  nodejs \
+  npm \
+  postgresql-client \
+  snapd \
+  software-properties-common \
+  ruby \
+  terminator \
+  texstudio \
+  tex-gyre \
+  tk-dev \
+  tmux \
+  touchegg \
+  tree \
+  ulauncher \
+  vim \
+  wget \
+  xdotool \
+  xz-utils \
+  zlib1g-dev \
+  zsh
+
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   ${UBUNTU_CODENAME} \
+   stable"
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+usermod -aG docker $USER
+
+sudo apt-add-repository ppa:philip.scott/elementary-tweaks
+sudo apt install -y elementary-tweaks
