@@ -215,6 +215,11 @@ if [[ -f "$HOME/.travis/travis.sh" ]]; then
   source $HOME/.travis/travis.sh
 fi
 
+# yarn
+if [[ -d "$HOME/.yarn" ]]; then
+  export PATH=$HOME/.yarn/bin:$PATH
+fi
+
 debug_timing 'profile - tooling done'
 
 # alias
