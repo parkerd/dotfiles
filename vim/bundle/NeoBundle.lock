@@ -29,3 +29,4 @@ NeoBundleLock vim-startify 4f1cd14e9488c871adf412686e5a8b80f6e0e4b7
 NeoBundleLock vim-surround e49d6c2459e0f5569ff2d533b4df995dd7f98313
 NeoBundleLock vim-terraform 33c0631028a2c3e20f634bc9cffcf3e4175126c2
 NeoBundleLock vim-toml f96b26610a756975d9620e1817a555a72d3d984d
+NeoBundleLock vim-yaml 0da1975ec394154349db744c1996fe2ef8fa5ed0

@@ -249,6 +249,8 @@ alias kubectl='/usr/local/bin/kubectl "--context=${KUBECTL_CONTEXT:-$(/usr/local
 alias k=kubectl
 alias kube=kubectl
 alias kci='kubectl cluster-info'
+alias kc=kube-con
+alias kns=kube-ns
 alias l='ls'
 alias ll='ls -l'
 alias mailhog='open "http://localhost:8025/"'
@@ -686,7 +688,12 @@ kube-env() {
 
   if [[ -z $1 ]]; then
     if which kubectl &>/dev/null; then
-      echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
+      # If kubectl is an alias using KUBECTL_CONTEXT, we need to report the current context as that var, if set
+      if which kubectl | grep KUBECTL_CONTEXT &>/dev/null; then
+        echo ${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}:${KUBECTL_NAMESPACE:-default}
+      else
+        echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
+      fi
     else
       echo "kubectl not found"
     fi
