@@ -250,6 +250,7 @@ alias k=kubectl
 alias kube=kubectl
 alias kci='kubectl cluster-info'
 alias kc=kube-con
+alias kn=kube-ns
 alias kns=kube-ns
 alias l='ls'
 alias ll='ls -l'
@@ -263,6 +264,7 @@ alias pvm=pyenv
 alias r='clear && rake'
 alias redis='redis-server /usr/local/etc/redis.conf'
 alias shfix='shfmt -i 2 -ci -bn -w .'
+alias stern='/usr/local/bin/stern "--context=${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
 alias sum='paste -sd+ - | bc'
 alias t='clear && rspec'
 alias tf=terraform
