@@ -26,6 +26,10 @@ if [[ -d "$HOME/.local/bin" ]]; then
   export PATH=$HOME/.local/bin:$PATH
 fi
 
+if [[ -f /usr/local/opt/asdf/asdf.sh ]]; then
+  source /usr/local/opt/asdf/asdf.sh
+fi
+
 # dart
 if [[ -d /usr/lib/dart/bin ]]; then
   export PATH=/usr/lib/dart/bin:$PATH
@@ -258,6 +262,7 @@ alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
 alias mk=minikube
 alias npm-ls='npm ls --depth=0 2>/dev/null'
+alias npx='npx --no-install'
 alias path="echo \$PATH | tr ':' '\n'"
 alias pti=ptipython
 alias pvm=pyenv
