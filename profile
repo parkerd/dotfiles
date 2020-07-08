@@ -2,6 +2,8 @@
 # profile
 # variables
 export BAT_PAGER=
+# disable auto open browser for react
+export BROWSER=none
 export CLICOLOR=1
 export EDITOR=vim
 export JRUBY_OPTS=--1.9
@@ -280,6 +282,7 @@ alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs
 alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
 alias sudox=xsudo
 alias watch='watch --color --differences --no-title bash -l -c'
+alias wo=workon
 
 if [[ "$(uname -s)" == "Linux" ]]; then
   alias ls='ls --color=auto'

@@ -37,6 +37,7 @@ debug_timing 'zshrc start'
 
 # aliases
 alias curl='noglob curl'
+alias git='noglob git'
 alias history='history 1'
 alias rake='noglob rake'
 alias root='sudo ZDOTDIR=$HOME zsh'

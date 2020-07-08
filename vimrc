@@ -38,7 +38,6 @@ NeoBundleLazy 'rizzatti/dash.vim'
 NeoBundleLazy 'scrooloose/nerdtree'
 " Languages
 NeoBundle 'cespare/vim-toml'
-NeoBundle 'dart-lang/dart-vim-plugin'
 NeoBundle 'elzr/vim-json'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'hashivim/vim-terraform'
@@ -179,22 +178,22 @@ autocmd BufWinLeave * call clearmatches()
 " vim-airline
 set laststatus=2
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'papercolor'
+let g:airline_theme = 'oldhope'
 
 " jedi-vim
-let g:jedi#completions_enabled = 0
-let g:jedi#show_call_signatures = "1"
-let g:jedi#goto_command = "<leader>g"
-let g:jedi#goto_assignments_command = "<leader>a"
-let g:jedi#goto_definitions_command = "<leader>s"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = ""
-let g:jedi#use_tabs_not_buffers = 1
-"let g:jedi#use_splits_not_buffers = "right"
-"let g:jedi#popup_select_first = 1
-autocmd FileType python setlocal completeopt-=preview
+"let g:jedi#completions_enabled = 0
+"let g:jedi#show_call_signatures = "1"
+"let g:jedi#goto_command = "<leader>g"
+"let g:jedi#goto_assignments_command = "<leader>a"
+"let g:jedi#goto_definitions_command = "<leader>s"
+"let g:jedi#documentation_command = "K"
+"let g:jedi#usages_command = "<leader>n"
+"let g:jedi#completions_command = "<C-Space>"
+"let g:jedi#rename_command = ""
+"let g:jedi#use_tabs_not_buffers = 1
+""let g:jedi#use_splits_not_buffers = "right"
+""let g:jedi#popup_select_first = 1
+"autocmd FileType python setlocal completeopt-=preview
 
 " supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
@@ -226,12 +225,12 @@ let g:promptline_preset = {
 \}
 
 " syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_loc_list_height = 3
-let g:syntastic_puppet_checkers = ['puppet-lint']
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_loc_list_height = 3
+"let g:syntastic_puppet_checkers = ['puppet-lint']
 
 " vim
 let g:vim_json_syntax_conceal = 0
