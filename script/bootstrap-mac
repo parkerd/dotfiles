@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+# OSX
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+# iTerm2
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/projects/dotfiles/iterm"
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true

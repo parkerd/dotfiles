@@ -8,6 +8,7 @@ export CLICOLOR=1
 export EDITOR=vim
 export JRUBY_OPTS=--1.9
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+export PYTHONSTARTUP="$(readlink ~/.pythonrc.py)"
 export PYTHON_CONFIGURE_OPTS="--enable-shared"
 export PYTHONDONTWRITEBYTECODE=1
 export VISUAL=vim
@@ -265,6 +266,7 @@ alias mh='open "http://localhost:8025/"'
 alias mk=minikube
 alias npm-ls='npm ls --depth=0 2>/dev/null'
 alias npx='npx --no-install'
+alias p=poetry
 alias path="echo \$PATH | tr ':' '\n'"
 alias pti=ptipython
 alias pvm=pyenv
@@ -282,6 +284,7 @@ alias vmhaltall='vagrant global-status | grep running | awk "{print $5}" | xargs
 alias xsudo='sudo env DISPLAY="$DISPLAY" XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"'
 alias sudox=xsudo
 alias watch='watch --color --differences --no-title bash -l -c'
+alias wk=workon
 alias wo=workon
 
 if [[ "$(uname -s)" == "Linux" ]]; then
@@ -617,14 +620,14 @@ vs() {
   #
   echo "\e[1mcode:     \e[0m v$(code --version | head -1)"
   echo "\e[1mdocker:   \e[0m v$(docker version | grep Version | head -1 | awk '{print $2}')"
-  echo "\e[1mdrone:    \e[0m v$(drone --version | awk '{print $3}')"
+  #echo "\e[1mdrone:    \e[0m v$(drone --version | awk '{print $3}')"
   echo "\e[1mgo:       \e[0m v$(go version | awk '{print $3}' | sed 's/go//')"
-  echo "\e[1mgitlab:   \e[0m v$(gitlab-runner --version | head -1 | awk '{print $2}')"
+  #echo "\e[1mgitlab:   \e[0m v$(gitlab-runner --version | head -1 | awk '{print $2}')"
   echo "\e[1mkubectl:  \e[0m $(kubectl version --client=true | cut -d\" -f6)"
-  echo "\e[1mminikube: \e[0m $(minikube version | awk '{print $3}')"
+  #echo "\e[1mminikube: \e[0m $(minikube version | awk '{print $3}')"
   echo "\e[1mpacker:   \e[0m $(packer version | head -1 | awk '{print $2}')"
   echo "\e[1mterraform:\e[0m $(terraform version | head -1 | awk '{print $2}')"
-  echo "\e[1mvagrant:  \e[0m v$(vagrant --version | awk '{print $2}')"
+  #echo "\e[1mvagrant:  \e[0m v$(vagrant --version | awk '{print $2}')"
 }
 
 kube-con() {

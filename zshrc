@@ -190,6 +190,11 @@ fi
   #source $rustup_completion_cache
 #fi
 
+# stern
+if which stern &> /dev/null; then
+  source <(stern --completion=zsh)
+fi
+
 debug_timing 'completion done'
 
 if [[ -f ~/.dayjob-zsh ]]; then

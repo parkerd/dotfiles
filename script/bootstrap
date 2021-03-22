@@ -6,19 +6,19 @@ cd "$(dirname "$0")/.."
 dotfiles=$(pwd)
 
 log() {
-  echo "==> $@..."
+  echo -e "\x1b[32m==> $*\x1b[0m"
 }
 
 ok() {
-  echo "    OK"
+  echo -e "    \x1b[1mOK\x1b[0m"
 }
 
 fail() {
-  echo "!!! $@" >&2
+  echo -e "\x1b[1m\x1b[41m!!! $*\x1b[0m"
   exit 1
 }
 
-links=$(ls -1 | grep -vE "^(README.md|script)")
+links=$(ls -1 | grep -vE "^(README.md|script|iterm)")
 
 create_link() {
   dotfile=$1
