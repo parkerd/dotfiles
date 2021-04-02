@@ -802,6 +802,8 @@
 	<false/>
 	<key>SplitPaneDimmingAmount</key>
 	<real>0.17849900265957447</real>
+	<key>TabStyleWithAutomaticOption</key>
+	<integer>5</integer>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>findMode_iTerm</key>
