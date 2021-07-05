@@ -45,6 +45,7 @@ NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'rodjek/vim-puppet'
 NeoBundle 'rust-lang/rust.vim'
 NeoBundle 'solarnz/thrift.vim'
+NeoBundle 'stephpy/vim-yaml'
 " Python
 NeoBundle 'hdima/python-syntax'
 NeoBundle 'hynek/vim-python-pep8-indent'

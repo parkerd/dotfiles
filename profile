@@ -15,7 +15,7 @@ export VISUAL=vim
 
 export GOSRC=github.com/parkerd
 export PROJECTS=~/projects
-SUBPROJECTS=( meeter )
+SUBPROJECTS=( meeter stord )
 export SUBPROJECTS
 
 debug_timing 'profile - tooling start'
@@ -230,12 +230,12 @@ fi
 debug_timing 'profile - tooling done'
 
 # alias
-alias atom='PYENV_VERSION=$(pyenv version-name) atom'
 alias b=bundle
 alias be='bundle exec'
 alias blog=hugo
 alias c=clear
 #alias code='PYENV_VERSION=$(pyenv version-name) VSCODE=1 code'
+alias d=docker
 alias dco=docker-compose
 alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias ex=exercism
@@ -249,14 +249,16 @@ alias Grep='grep'
 alias gssh="ssh -i ~/.ssh/google_compute_engine"
 alias hgrep='history | grep'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
+alias i=istioctl
 alias ipy=ipython
 alias irb='irb --simple-prompt'
+alias ist=istioctl
 alias js2json="node -e \"const fs = require('fs');const js = fs.readFileSync(0, 'utf-8');const data = eval(js);console.log(JSON.stringify(data))\""
 alias kubectl='/usr/local/bin/kubectl "--context=${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
 alias k=kubectl
-alias kube=kubectl
 alias kci='kubectl cluster-info'
 alias kc=kube-con
+alias kdd='kube-env docker-desktop'
 alias kn=kube-ns
 alias kns=kube-ns
 alias l='ls'

@@ -17,6 +17,7 @@ aa = add --all
 br = branch -vv
 brd = branch -d
 ca = commit --amend
+cb = rev-parse --abbrev-ref HEAD
 ci = commit
 cm = !git add --all && git commit -m
 cp = cherry-pick
@@ -58,11 +59,23 @@ smudge = git media smudge %f
 
 [include]
 path = ~/.gitconfig-dayjob
+
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
+cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+path =
+
 [mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+trustExitCode = true
+
 [pull]
-	rebase = false
+rebase = false
+
+[filter "lfs"]
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+
+[url "ssh://git@github.com/"]
+insteadOf = https://github.com/

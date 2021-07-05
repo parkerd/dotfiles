@@ -21,16 +21,16 @@ fail() {
 links=$(ls -1 | grep -vE "^(README.md|script|iterm)")
 
 create_link() {
-  dotfile=$1
-  filepath=$2
+  local dotfile=$1
+  local filepath=$2
 
   echo "    Linking ${dotfile} -> ${filepath}"
   ln -s $filepath $dotfile
 }
 
 update_link() {
-  dotfile=$1
-  filepath=$2
+  local dotfile=$1
+  local filepath=$2
 
   # Skip vim setup if vim doesn't exist
   if [[ "$dotfile" == *.vim* ]]; then
@@ -46,14 +46,14 @@ update_link() {
     if [[ $(readlink $dotfile) == $dotfiles* ]]; then
       ok
     else
-      fail "..."
+      fail "Incorrect symlink: $dotfile"
     fi
   elif [[ -d $dotfile ]]; then
-      for name in $(ls -1 $filepath); do
-        update_link $dotfile/$name $filepath/$name
-      done
+    for name in $(ls -1 $filepath); do
+      update_link $dotfile/$name $filepath/$name
+    done
   else
-    fail "${dotfile} is not a symlink"
+    fail "Not a symlink: $dotfile"
   fi
 }
 

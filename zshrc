@@ -49,6 +49,11 @@ zsh-debug() {
   zsh -i -c "set -x; $*"
 }
 
+# bat
+if which bat &> /dev/null; then
+  alias cat='bat -pp'
+fi
+
 # direnv
 if which direnv &> /dev/null && ! which _direnv_hook &> /dev/null; then
   #export DIRENV_LOG_FORMAT=
@@ -146,10 +151,19 @@ if [[ "$(basename ${(%):-%x})" != "_pipenv" ]]; then
   compdef _pipenv pipenv
 fi
 
+# ccloud
+if which ccloud &>/dev/null; then
+  source <(ccloud completion zsh)
+fi
+
 # gcloud
 if [[ -d /usr/local/google-cloud-sdk ]]; then
-  source '/usr/local/google-cloud-sdk/path.zsh.inc'
-  source '/usr/local/google-cloud-sdk/completion.zsh.inc'
+  source /usr/local/google-cloud-sdk/path.zsh.inc
+  source /usr/local/google-cloud-sdk/completion.zsh.inc
+fi
+if [[ -d /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk ]]; then
+  source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
+  source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 fi
 
 # fzf
