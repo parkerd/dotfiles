@@ -157,11 +157,11 @@ fi
 #fi
 
 # java
-JAVA_VERSION=1.8.0_112
-if [[ -d "/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home" ]]; then
-  export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home/"
-  export PATH=$JAVA_HOME/bin:$PATH
-fi
+#JAVA_VERSION=1.8.0_112
+#if [[ -d "/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home" ]]; then
+#  export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk${JAVA_VERSION}.jdk/Contents/Home/"
+#  export PATH=$JAVA_HOME/bin:$PATH
+#fi
 
 # n
 #if which n &> /dev/null; then
@@ -171,35 +171,29 @@ fi
 #fi
 
 # nvm
-if [[ -d "$HOME/.nvm" ]]; then
-  export NVM_DIR=~/.nvm
-  if [[ -f /usr/local/opt/nvm/nvm.sh ]]; then
-    source /usr/local/opt/nvm/nvm.sh --no-use
-  elif [[ -f $NVM_DIR/nvm.sh ]]; then
-    source $NVM_DIR/nvm.sh --no-use
-  fi
-fi
-
-# phpbrew
-# SLOW
-#if [ -d "$HOME/.phpbrew" ]; then
-#  source ~/.phpbrew/bashrc
+#if [[ -d "$HOME/.nvm" ]]; then
+#  export NVM_DIR=~/.nvm
+#  if [[ -f /usr/local/opt/nvm/nvm.sh ]]; then
+#    source /usr/local/opt/nvm/nvm.sh --no-use
+#  elif [[ -f $NVM_DIR/nvm.sh ]]; then
+#    source $NVM_DIR/nvm.sh --no-use
+#  fi
 #fi
 
 # pyenv
-if [[ -d "$HOME/.pyenv/bin" ]]; then
-  export PYENV_ROOT=$HOME/.pyenv
-  export PATH=$PYENV_ROOT/bin:$PATH
-  if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
-    export PATH=$PYENV_ROOT/plugins/pyenv-virtualenv/bin:$PATH
-  fi
-fi
-if which pyenv &>/dev/null; then
-  eval "$(pyenv init -)"
-  if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
-    eval "$(pyenv virtualenv-init -)"
-  fi
-fi
+#if [[ -d "$HOME/.pyenv/bin" ]]; then
+#  export PYENV_ROOT=$HOME/.pyenv
+#  export PATH=$PYENV_ROOT/bin:$PATH
+#  if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
+#    export PATH=$PYENV_ROOT/plugins/pyenv-virtualenv/bin:$PATH
+#  fi
+#fi
+#if which pyenv &>/dev/null; then
+#  eval "$(pyenv init -)"
+#  if [[ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
+#    eval "$(pyenv virtualenv-init -)"
+#  fi
+#fi
 
 # scala
 if [[ -d "/usr/local/opt/scala210/bin" ]]; then
@@ -212,15 +206,10 @@ if [[ -d "$HOME/.cargo" ]]; then
 fi
 
 # rvm
-if [[ -d "$HOME/.rvm" ]]; then
-  export PATH=$HOME/.rvm/bin:$PATH
-  source ~/.rvm/scripts/rvm
-fi
-
-# travis
-if [[ -f "$HOME/.travis/travis.sh" ]]; then
-  source $HOME/.travis/travis.sh
-fi
+#if [[ -d "$HOME/.rvm" ]]; then
+#  export PATH=$HOME/.rvm/bin:$PATH
+#  source ~/.rvm/scripts/rvm
+#fi
 
 # yarn
 if [[ -d "$HOME/.yarn" ]]; then
