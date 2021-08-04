@@ -20,8 +20,8 @@ export SUBPROJECTS
 
 debug_timing 'profile - tooling start'
 
-# Prefer local commands
-export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+# Add local sbin to PATH
+export PATH=/usr/local/sbin:$PATH
 
 # local
 # first to prefer commands in more specific environments
@@ -847,7 +847,7 @@ kls() {
   #
   # Show all resources in current namespace.
   #
-  kubectl get serviceaccounts,configmaps,secrets,ingresses,services,endpoints,statefulsets,daemonsets,deployments,replicasets,horizontalpodautoscalers,limitranges,networkpolicies,pods,persistentvolumeclaims,podtemplates,replicationcontrollers,resourcequotas,jobs $@
+  kubectl get $(kubectl api-resources --verbs=list --namespaced -o name | sed '$!s/$/,/' | tr -d '\n') $@
 }
 
 kcs() {
@@ -875,6 +875,24 @@ khosts() {
   ip=$(k describe svc/traefik-ingress-lb -n traefik-ingress | grep "^IP" | awk '{print $2}')
   names=$(kubectl get ing --all-namespaces --no-headers=true | awk '{print $3}' | tr '\n' ' ')
   echo "$ip $names"
+}
+
+ksecret() {
+  name=$1
+  if [[ -z $name ]]; then
+    kubectl get secret
+    return
+  fi
+  shift
+
+  local key=$1
+  if [[ -z $key ]]; then
+    kubectl get secret $name -o yaml
+  else
+    kubectl get secret $name -o yaml \
+    | yq e ".data.\"$key\"" - \
+    | base64 -D
+  fi
 }
 
 pocket() {
