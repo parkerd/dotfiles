@@ -38,6 +38,7 @@ NeoBundleLazy 'rizzatti/dash.vim'
 NeoBundleLazy 'scrooloose/nerdtree'
 " Languages
 NeoBundle 'cespare/vim-toml'
+NeoBundle 'elixir-editors/vim-elixir'
 NeoBundle 'elzr/vim-json'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'hashivim/vim-terraform'

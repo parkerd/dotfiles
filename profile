@@ -845,6 +845,13 @@ gocov() {
 
 kls() {
   #
+  # Show default resources in current namespace.
+  #
+  kubectl get sa,cm,secret,ingress,svc,ds,sts,pvc,deploy,rs,rc,pod,cj,job $@
+}
+
+klsa() {
+  #
   # Show all resources in current namespace.
   #
   kubectl get $(kubectl api-resources --verbs=list --namespaced -o name | sed '$!s/$/,/' | tr -d '\n') $@
