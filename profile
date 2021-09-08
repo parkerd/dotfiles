@@ -232,6 +232,7 @@ alias g=gcloud
 alias gcm='git-co master'
 alias gcd='git-co dev'
 alias gco='git-co'
+alias gcp=gcloud
 alias gst='git st'
 alias grep='grep --color'
 alias Grep='grep'
