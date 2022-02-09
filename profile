@@ -237,6 +237,8 @@ alias gst='git st'
 alias grep='grep --color'
 alias Grep='grep'
 alias gssh="ssh -i ~/.ssh/google_compute_engine"
+alias h=helm
+alias hf=helmfile
 alias hgrep='history | grep'
 alias hist="uniq -c | awk '{printf(\"\n%-25s|\", \$0); for (i = 0; i<(\$1); i++) { printf(\"#\") };}'; echo; echo"
 alias i=istioctl
