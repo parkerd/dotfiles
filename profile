@@ -250,14 +250,20 @@ alias kubectl='/usr/local/bin/kubectl "--context=${KUBECTL_CONTEXT:-$(/usr/local
 alias k=kubectl
 alias kci='kubectl cluster-info'
 alias kc=kube-con
-alias kdd='kube-env docker-desktop'
-alias kn=kube-ns
-alias kns=kube-ns
+#alias kdd='kube-env docker-desktop'
+alias kdd='kubectx docker-desktop'
+alias kn=kns
+#alias kns=kube-ns
+alias kns='kubens | cat'
+#alias krd='kube-env rancher-desktop'
+alias krd='kubectx rancher-desktop'
+alias kx='kubectx | cat'
 alias l='ls'
 alias ll='ls -l'
 alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
 alias mk=minikube
+alias n=nerdctl
 alias npm-ls='npm ls --depth=0 2>/dev/null'
 alias npx='npx --no-install'
 alias p=poetry
@@ -612,14 +618,17 @@ vs() {
   #
   # Show current version for commonly used tools.
   #
-  echo "\e[1mcode:     \e[0m v$(code --version | head -1)"
-  echo "\e[1mdocker:   \e[0m v$(docker version | grep Version | head -1 | awk '{print $2}')"
+  echo "\e[1mansible:  \e[0m v$(ansible --version | head -1 | awk '{print $3}' | cut -d] -f1)"
+  #echo "\e[1mcode:     \e[0m v$(code --version | head -1)"
+  echo "\e[1mcdk8s:    \e[0m v$(cdk8s --version)"
+  echo "\e[1mcdktf:    \e[0m v$(cdktf --version)"
+  #echo "\e[1mdocker:   \e[0m v$(docker version | grep Version | head -1 | awk '{print $2}')"
   #echo "\e[1mdrone:    \e[0m v$(drone --version | awk '{print $3}')"
-  echo "\e[1mgo:       \e[0m v$(go version | awk '{print $3}' | sed 's/go//')"
+  #echo "\e[1mgo:       \e[0m v$(go version | awk '{print $3}' | sed 's/go//')"
   #echo "\e[1mgitlab:   \e[0m v$(gitlab-runner --version | head -1 | awk '{print $2}')"
   echo "\e[1mkubectl:  \e[0m $(kubectl version --client=true | cut -d\" -f6)"
   #echo "\e[1mminikube: \e[0m $(minikube version | awk '{print $3}')"
-  echo "\e[1mpacker:   \e[0m $(packer version | head -1 | awk '{print $2}')"
+  #echo "\e[1mpacker:   \e[0m $(packer version | head -1 | awk '{print $2}')"
   echo "\e[1mterraform:\e[0m $(terraform version | head -1 | awk '{print $2}')"
   #echo "\e[1mvagrant:  \e[0m v$(vagrant --version | awk '{print $2}')"
 }
