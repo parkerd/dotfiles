@@ -171,6 +171,12 @@ fi
 #  n 10.15.3 # lts
 #fi
 
+# nerdctl
+if which nerdctl &>/dev/null; then
+  alias docker=nerdctl
+  alias docker-compose="nerdctl compose"
+fi
+
 # nvm
 #if [[ -d "$HOME/.nvm" ]]; then
 #  export NVM_DIR=~/.nvm
@@ -250,7 +256,8 @@ alias js2json="node -e \"const fs = require('fs');const js = fs.readFileSync(0, 
 alias kubectl='/usr/local/bin/kubectl "--context=${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
 alias k=kubectl
 alias kci='kubectl cluster-info'
-alias kc=kube-con
+#alias kc=kube-con
+alias kc=kubectx
 #alias kdd='kube-env docker-desktop'
 alias kdd='kubectx docker-desktop'
 alias kn=kns
@@ -265,6 +272,7 @@ alias mailhog='open "http://localhost:8025/"'
 alias mh='open "http://localhost:8025/"'
 alias mk=minikube
 alias n=nerdctl
+alias nco="nerdctl compose"
 alias npm-ls='npm ls --depth=0 2>/dev/null'
 alias npx='npx --no-install'
 alias p=poetry
@@ -287,6 +295,7 @@ alias sudox=xsudo
 alias watch='watch --color --differences --no-title bash -l -c'
 alias wk=workon
 alias wo=workon
+alias y=yarn
 
 if [[ "$(uname -s)" == "Linux" ]]; then
   alias ls='ls --color=auto'
