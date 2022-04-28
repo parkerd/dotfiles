@@ -714,11 +714,13 @@ kube-env() {
 
   if [[ -z $1 ]]; then
     if which kubectl &>/dev/null; then
+      context=$(kubectx --current)
+      namespace=$(kubens --current)
       # If kubectl is an alias using KUBECTL_CONTEXT, we need to report the current context as that var, if set
       if which kubectl | grep KUBECTL_CONTEXT &>/dev/null; then
-        echo ${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}:${KUBECTL_NAMESPACE:-default}
+        echo ${KUBECTL_CONTEXT:-$context}:${KUBECTL_NAMESPACE:-$namespace}
       else
-        echo $(/usr/local/bin/kubectl config current-context):${KUBECTL_NAMESPACE:-default}
+        echo $context:${KUBECTL_NAMESPACE:-$namespace}
       fi
     else
       echo "kubectl not found"
