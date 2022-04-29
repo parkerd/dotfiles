@@ -172,9 +172,13 @@ fi
 #fi
 
 # nerdctl
-if which nerdctl &>/dev/null; then
+if [[ -d "$HOME/.rd" ]]; then
+  export PATH=$HOME/.rd/bin:$PATH
+  export KUBECTL_PATH=$HOME/.rd/bin/kubectl
   alias docker=nerdctl
   alias docker-compose="nerdctl compose"
+else
+  export KUBECTL_PATH=/usr/local/bin/kubectl
 fi
 
 # nvm
@@ -253,7 +257,7 @@ alias ipy=ipython
 alias irb='irb --simple-prompt'
 alias ist=istioctl
 alias js2json="node -e \"const fs = require('fs');const js = fs.readFileSync(0, 'utf-8');const data = eval(js);console.log(JSON.stringify(data))\""
-alias kubectl='/usr/local/bin/kubectl "--context=${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
+alias kubectl=$KUBECTL_PATH' "--context=${KUBECTL_CONTEXT:-$('$KUBECTL_PATH' config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
 alias k=kubectl
 alias kci='kubectl cluster-info'
 #alias kc=kube-con
@@ -282,7 +286,7 @@ alias pvm=pyenv
 alias r='clear && rake'
 alias redis='redis-server /usr/local/etc/redis.conf'
 alias shfix='shfmt -i 2 -ci -bn -w .'
-alias stern='/usr/local/bin/stern "--context=${KUBECTL_CONTEXT:-$(/usr/local/bin/kubectl config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
+alias stern='/usr/local/bin/stern "--context=${KUBECTL_CONTEXT:-$('$KUBECTL_PATH' config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
 alias sum='paste -sd+ - | bc'
 alias t='clear && rspec'
 alias tf=terraform
@@ -657,7 +661,7 @@ kube-con() {
   fi
 
   export KUBECTL_CONTEXT=$1
-  if [[ -n "$KUBECTL_CONTEXT" && "$(/usr/local/bin/kubectl config current-context)" != "$KUBECTL_CONTEXT" ]]; then
+  if [[ -n "$KUBECTL_CONTEXT" && "$($KUBECTL_PATH config current-context)" != "$KUBECTL_CONTEXT" ]]; then
     kubectl config use-context $KUBECTL_CONTEXT
   fi
 }
