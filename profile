@@ -69,6 +69,7 @@ if which docker &> /dev/null; then
 '
     screen -S docker-mac -X quit
   }
+
   docker-dns-google() {
     #
     # Restart local docker using Google DNS.
@@ -120,6 +121,8 @@ if which docker &> /dev/null; then
     _docker-env_$env
     export DOCKER_ENV=$env
   fi
+else
+  docker-env() {}
 fi
 
 # ag
@@ -175,8 +178,6 @@ fi
 if [[ -d "$HOME/.rd" ]]; then
   export PATH=$HOME/.rd/bin:$PATH
   export KUBECTL_PATH=$HOME/.rd/bin/kubectl
-  alias docker=nerdctl
-  alias docker-compose="nerdctl compose"
 else
   export KUBECTL_PATH=/usr/local/bin/kubectl
 fi
