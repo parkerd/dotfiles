@@ -209,16 +209,16 @@ nmap <silent> <leader>d :Dash<CR>
 " tmuxline.vim
 " :Tmuxline powerline powerline
 
+"\'$(aws-env current)',
+"\"$(docker-env | grep '^*' | grep -v local | awk '{print $2}')",
+"\"$(asdf current elixir | awk '{print $2}' | grep -v system)",
+"\"$(asdf current nodejs | awk '{print $2}' | grep -v system)",
+"\"$(asdf current python | awk '{print $2}' | grep -v system)",
 " promptline.vim
 let g:promptline_theme = 'airline'
 let g:promptline_preset = {
   \'a': [
-    \'$(aws-env current)',
-    \"$(docker-env | grep '^*' | grep -v local | awk '{print $2}')",
     \'$(kube-env | grep -v docker-desktop:default | grep -v rancher-desktop:default | grep -v kubectl)',
-    \"$(asdf current elixir | awk '{print $2}' | grep -v system)",
-    \"$(asdf current nodejs | awk '{print $2}' | grep -v system)",
-    \"$(asdf current python | awk '{print $2}' | grep -v system)",
     \'$(__pp_git_branch)',
   \],
   \'b': [ '$__pp_name' ],

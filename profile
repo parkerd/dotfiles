@@ -122,7 +122,7 @@ if which docker &> /dev/null; then
     export DOCKER_ENV=$env
   fi
 else
-  docker-env() {}
+  docker-env() { return; }
 fi
 
 # ag
@@ -713,14 +713,17 @@ kube-env() {
   #
   # Manage kubectl context:namespace.
   #
-  if [[ ! -f $HOME/.kube/config ]]; then
+  config=$HOME/.kube/config
+  if [[ ! -f $config ]]; then
     return
   fi
 
   if [[ -z $1 ]]; then
     if which kubectl &>/dev/null; then
-      context=$(kubectx --current)
-      namespace=$(kubens --current)
+      #context=$(kubectx --current)
+      context=$(grep current-context $config | awk '{print $2}')
+      #namespace=$(kubens --current)
+      namespace=$(grep -A1 "cluster: $context" ~/.kube/config | grep namespace | awk '{print $2}')
       # If kubectl is an alias using KUBECTL_CONTEXT, we need to report the current context as that var, if set
       if which kubectl | grep KUBECTL_CONTEXT &>/dev/null; then
         echo ${KUBECTL_CONTEXT:-$context}:${KUBECTL_NAMESPACE:-$namespace}

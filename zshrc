@@ -115,21 +115,22 @@ setopt PROMPT_CR
 setopt PROMPT_SP
 export PROMPT_EOL_MARK=""
 
-# autocomplete
-fpath=(/usr/local/share/zsh-completions $fpath)
-autoload compinit && compinit -i
-zstyle ':completion:*' menu select
-function _git_close() { _git_checkout }
-function _git_co() { _git_checkout }
-function _git_workon() { _git_checkout }
-
 # syntax highlighting
 if [[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
+function _git_close() { _git_checkout }
+function _git_co() { _git_checkout }
+function _git_workon() { _git_checkout }
+
 debug_timing 'zshrc done'
 debug_timing 'completion start'
+
+# autocomplete
+fpath=(/usr/local/share/zsh-completions $fpath)
+autoload compinit && compinit -i
+zstyle ':completion:*' menu select
 
 # pip
 function _pip_completion {
@@ -143,13 +144,13 @@ function _pip_completion {
 compctl -K _pip_completion pip
 
 # pipenv
-_pipenv() {
-  eval $(env COMMANDLINE="${words[1,$CURRENT]}" _PIPENV_COMPLETE=complete-zsh  pipenv)
-}
-if [[ "$(basename ${(%):-%x})" != "_pipenv" ]]; then
-  autoload -U compinit && compinit
-  compdef _pipenv pipenv
-fi
+#_pipenv() {
+  #eval $(env COMMANDLINE="${words[1,$CURRENT]}" _PIPENV_COMPLETE=complete-zsh  pipenv)
+#}
+#if [[ "$(basename ${(%):-%x})" != "_pipenv" ]]; then
+  #autoload -U compinit && compinit
+  #compdef _pipenv pipenv
+#fi
 
 # ccloud
 if which ccloud &>/dev/null; then
@@ -187,13 +188,13 @@ if which kubectl &>/dev/null; then
 fi
 
 # minikube
-if which minikube &>/dev/null; then
-  local minikube_completion_cache=/tmp/zsh-completion-minikube
-  if [[ ! -f $minikube_completion_cache ]]; then
-    minikube completion zsh > $minikube_completion_cache
-  fi
-  source $minikube_completion_cache
-fi
+#if which minikube &>/dev/null; then
+  #local minikube_completion_cache=/tmp/zsh-completion-minikube
+  #if [[ ! -f $minikube_completion_cache ]]; then
+    #minikube completion zsh > $minikube_completion_cache
+  #fi
+  #source $minikube_completion_cache
+#fi
 
 # rustup
 #if which rustup &>/dev/null; then

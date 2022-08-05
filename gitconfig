@@ -60,6 +60,9 @@ smudge = git media smudge %f
 [include]
 path = ~/.gitconfig-dayjob
 
+[init]
+defaultBranch = main
+
 [difftool "sourcetree"]
 cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 path =
