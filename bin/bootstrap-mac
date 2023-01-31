@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+# OSX
+defaults write com.apple.notificationcenterui bannerTime -int 5
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+# iTerm2
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/projects/dotfiles/iterm"

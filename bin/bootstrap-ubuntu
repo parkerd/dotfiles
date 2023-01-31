@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+set -e
+source /etc/os-release
+
+sudo apt install -y \
+  ack \
+  apt-transport-https \
+  build-essential \
+  cargo \
+  ca-certificates \
+  colordiff \
+  compizconfig-settings-manager \
+  curl \
+  direnv \
+  dconf-editor \
+  git \
+  gnome-tweaks \
+  gnupg-agent \
+  jq \
+  libbz2-dev \
+  libffi-dev \
+  libinput-tools \
+  liblzma-dev \
+  libncurses5-dev \
+  libprotobuf-dev \
+  libreadline-dev \
+  libssl-dev \
+  libsqlite3-dev \
+  libxml2-dev \
+  libxmlsec1-dev \
+  llvm \
+  make \
+  nodejs \
+  net-tools \
+  postgresql-client \
+  protobuf-compiler \
+  protobuf-compiler-grpc \
+  snapd \
+  software-properties-common \
+  ruby \
+  terminator \
+  texstudio \
+  tex-gyre \
+  tk-dev \
+  tmux \
+  touchegg \
+  tree \
+  vim \
+  wget \
+  xdotool \
+  xz-utils \
+  zlib1g-dev \
+  zsh
+
+if ! which ulauncher &>/dev/null; then
+  sudo add-apt-repository ppa:agornostal/ulauncher
+  sudo apt install -y ulauncher
+fi
+
+if ! which docker &>/dev/null; then
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  sudo apt-key fingerprint 0EBFCD88
+  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+    ${UBUNTU_CODENAME} \
+    stable"
+  sudo apt install -y docker-ce docker-ce-cli containerd.io
+  sudo usermod -aG docker $USER
+fi
+
+if ! which aws &>/dev/null; then
+  snap install aws-cli --classic
+fi
+
+if ! which gcloud &>/dev/null; then
+  echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+  sudo apt install -y google-cloud-sdk
+fi
+
+if ! which kubectl &>/dev/null; then
+  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+#  echo "deb https://apt.kubernetes.io/ kubernetes-${UBUNTU_CODENAME} main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+  sudo apt install -y kubectl
+  sudo ln -s /usr/bin/kubectl /usr/local/bin/kubectl
+fi

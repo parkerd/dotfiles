@@ -723,7 +723,7 @@ kube-env() {
       #context=$(kubectx --current)
       context=$(grep current-context $config | awk '{print $2}')
       #namespace=$(kubens --current)
-      namespace=$(grep -A1 "cluster: $context" ~/.kube/config | grep namespace | awk '{print $2}')
+      namespace=$(grep -A5 "cluster: $context" ~/.kube/config | grep namespace | head -1 | awk '{print $2}')
       # If kubectl is an alias using KUBECTL_CONTEXT, we need to report the current context as that var, if set
       if which kubectl | grep KUBECTL_CONTEXT &>/dev/null; then
         echo ${KUBECTL_CONTEXT:-$context}:${KUBECTL_NAMESPACE:-$namespace}

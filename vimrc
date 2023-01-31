@@ -218,7 +218,8 @@ nmap <silent> <leader>d :Dash<CR>
 let g:promptline_theme = 'airline'
 let g:promptline_preset = {
   \'a': [
-    \'$(kube-env | grep -v docker-desktop:default | grep -v rancher-desktop:default | grep -v kubectl)',
+    \'$(kube-env | grep -v rancher-desktop:)',
+    \'$(if [[ -d .terraform ]]; then terraform workspace show; fi)',
     \'$(__pp_git_branch)',
   \],
   \'b': [ '$__pp_name' ],

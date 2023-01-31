@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+dotfiles=$(pwd)
+
+log() {
+  echo -e "\x1b[32m==> $*\x1b[0m"
+}
+
+ok() {
+  echo -e "    \x1b[1mOK\x1b[0m"
+}
+
+warn() {
+  echo -e "\x1b[1m\x1b[33m!!! $*\x1b[0m"
+}
+
+fail() {
+  echo -e "\x1b[1m\x1b[41m!!! $*\x1b[0m"
+  exit 1
+}
+
+links=$(ls -1 | grep -vE "^(README.md|script|iterm)")
+
+create_link() {
+  local dotfile=$1
+  local filepath=$2
+
+  echo "    Linking ${dotfile} -> ${filepath}"
+  ln -s $filepath $dotfile
+}
+
+update_link() {
+  local dotfile=$1
+  local filepath=$2
+
+  # Skip vim setup if vim doesn't exist
+  if [[ "$dotfile" == *.vim* ]]; then
+    if ! which vim &> /dev/null; then
+      return
+    fi
+  fi
+
+  log "Checking $dotfile"
+  if [[ ! -e $dotfile ]]; then
+    create_link $dotfile $filepath
+  elif [[ -L $dotfile ]]; then
+    if [[ $(readlink $dotfile) == $dotfiles* ]]; then
+      ok
+    else
+      fail "Incorrect symlink: $dotfile"
+    fi
+  elif [[ -d $dotfile ]]; then
+    for name in $(ls -1 $filepath); do
+      update_link $dotfile/$name $filepath/$name
+    done
+  else
+    fail "Not a symlink: $dotfile"
+  fi
+}
+
+asdf_plugin_add() {
+  local plugin=$1
+  local exists=$(asdf plugin list | grep -c $plugin)
+  if [[ $exists -eq 0 ]]; then
+    asdf plugin add $plugin
+  fi
+}
+
+# main
+if [[ -d $dotfiles ]]; then
+  cd $dotfiles
+
+  for name in $links; do
+    update_link ~/.$name $dotfiles/$name
+  done
+else
+  fail "does not exist: ${dotfiles}"
+fi
+
+if which vim &> /dev/null; then
+  log "Checking NeoBundle"
+  if [[ -d "vim/bundle/neobundle.vim" ]]; then
+    ok
+  else
+    mkdir -p ~/.vim/bundle
+    git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+    echo "Run `bin/neobundle-install` to install NeoBundle plugins."
+  fi
+fi
+
+if which brew &>/dev/null; then
+  # asdf
+  log "Checking asdf"
+  if which asdf &>/dev/null; then
+    for plugin in elixir nodejs python; do
+      asdf_plugin_add $plugin
+    done
+    ok
+  else
+    warn "Not installed"
+  fi
+
+  # fzf
+  log "Checking fzf"
+  if which fzf &>/dev/null; then
+    if [[ ! -f ~/.fzf.zsh ]]; then
+      $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc
+    fi
+    ok
+  else
+    warn "Not installed"
+  fi
+fi
