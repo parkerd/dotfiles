@@ -30,8 +30,8 @@ if [[ -d "$HOME/.local/bin" ]]; then
   export PATH=$HOME/.local/bin:$PATH
 fi
 
-if [[ -f /usr/local/opt/asdf/asdf.sh ]]; then
-  source /usr/local/opt/asdf/asdf.sh
+if [[ -f /usr/local/opt/asdf/libexec/asdf.sh ]]; then
+  source /usr/local/opt/asdf/libexec/asdf.sh
 fi
 
 # dart
