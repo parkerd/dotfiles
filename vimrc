@@ -15,7 +15,7 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 " General
-NeoBundle 'editorconfig/editorconfig-vim'
+"NeoBundle 'editorconfig/editorconfig-vim'
 " Visual
 NeoBundle 'bling/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'

@@ -87,9 +87,9 @@ else
 fi
 
 # promptline
-if [ -f ~/.promptline.conf ]; then
-  source ~/.promptline.conf
-fi
+#if [ -f ~/.promptline.conf ]; then
+#  source ~/.promptline.conf
+#fi
 
 # bash-style bindings
 bindkey "^A" beginning-of-line
@@ -204,6 +204,17 @@ fi
   #fi
   #source $rustup_completion_cache
 #fi
+
+# rtx
+if which rtx &> /dev/null; then
+  export RTX_QUIET=1
+  eval "$(rtx activate zsh)"
+fi
+
+# starship
+if which starship &> /dev/null; then
+  eval "$(starship init zsh)"
+fi
 
 # stern
 if which stern &> /dev/null; then

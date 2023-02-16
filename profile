@@ -30,7 +30,9 @@ if [[ -d "$HOME/.local/bin" ]]; then
   export PATH=$HOME/.local/bin:$PATH
 fi
 
-if [[ -f /usr/local/opt/asdf/asdf.sh ]]; then
+if which rtx &>/dev/null; then
+  test
+elif [[ -f /usr/local/opt/asdf/asdf.sh ]]; then
   source /usr/local/opt/asdf/asdf.sh
 fi
 
@@ -280,7 +282,8 @@ alias n=nerdctl
 alias nco="nerdctl compose"
 alias npm-ls='npm ls --depth=0 2>/dev/null'
 alias npx='npx --no-install'
-alias p=poetry
+alias p=pnpm
+alias po=poetry
 alias path="echo \$PATH | tr ':' '\n'"
 alias pti=ptipython
 alias pvm=pyenv
@@ -302,7 +305,9 @@ alias wk=workon
 alias wo=workon
 alias y=yarn
 
-if [[ "$(uname -s)" == "Linux" ]]; then
+if which lsd &>/dev/null; then
+  alias ls=lsd
+elif [[ "$(uname -s)" == "Linux" ]]; then
   alias ls='ls --color=auto'
 fi
 
@@ -324,7 +329,7 @@ help() {
   # Show custom functions with docstring.
   #
   target=~/.profile
-  for func in $(grep "() {" $target | awk '{print $1}' | grep -v "^_" | grep "()" | sort); do
+  for func in $(grep "() {" $target | awk '{print $1}' | grep -v "^_" | grep "()" | sort | grep -v docker-env); do
     printf "%20s %s\n" "${func%\(\)}" "$(egrep -A4 "^\s*$func\(\)" $target | grep "#" | cut -d\# -f2 | awk NF)"
   done
 }
@@ -917,6 +922,9 @@ khosts() {
 }
 
 ksecret() {
+  #
+  # Fetch a secret yaml or key.
+  #
   name=$1
   if [[ -z $name ]]; then
     kubectl get secret

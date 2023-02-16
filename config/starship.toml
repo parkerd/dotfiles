@@ -1,0 +1,109 @@
+add_newline = false
+continuation_prompt = '[❯](bold black) '
+format = """
+
+$aws$gcloud$custom
+$kubernetes$docker_context
+$git_branch\
+$git_commit\
+$git_status\
+$git_metrics\
+$git_state\
+$terraform\
+$helm\
+$nodejs\
+$python\
+$cmd_duration\
+$status\
+$line_break\
+$username$hostname$directory$character"""
+
+[aws]
+#format = '[aws:](bold white) [$profile (\($region\)) (\[$duration\])]($style) [|](bold white) '
+format = '[aws:](bold white) [$profile (\($region\))]($style) [|](bold white) '
+style = "bold red"
+
+[character]
+success_symbol = '[❯❯](bold green)'
+error_symbol = '[❯❯](bold red)'
+
+[cmd_duration]
+min_time = 0
+format = '[|](bold white) [$duration]($style) '
+style = "bold green"
+
+[directory]
+format = '[$path]($style)[$read_only]($read_only_style) '
+read_only_style = "bold red"
+repo_root_style = "bold white"
+style = "bold black"
+
+[docker_context]
+format = '[ | docker:](bold white) [$context]($style) '
+only_with_files = false
+style = "bold red"
+
+[gcloud]
+#format = '[$account(@$domain) (\($region\))]($style)'
+#format = '[$project (\($region\))]($style)'
+format = '[gcp:](bold white) [$project (\($region\))]($style)'
+style = "bold red"
+
+[git_branch]
+format = '[$symbol$branch(:$remote_branch)]($style) '
+style = "bold white"
+
+[git_metrics]
+disabled = false
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
+tag_disabled = false
+tag_symbol = " - "
+
+[git_state]
+style = "bold white"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+
+[helm]
+format = '[| helm:](bold white) [($version )]($style)'
+style = "bold red"
+
+[hostname]
+ssh_symbol = ""
+style = "bold white"
+
+[kubernetes]
+disabled = false
+#format = '[$context( \($namespace\))]($style)'
+format = '[k8s:](bold white) [$context( \($namespace\))]($style)'
+style = "bold red"
+
+[nodejs]
+format = '[| nodejs:](bold white) [$version ]($style)'
+style = "bold red"
+
+[python]
+format = '[| python:](bold white) [${pyenv_prefix}(${version})(\($virtualenv\))]($style) '
+style = "bold red"
+
+[status]
+disabled = false
+format = '[|](bold white) [$symbol $common_meaning$signal_name$maybe_int]($style)'
+symbol = "✗"
+
+[terraform]
+format = '[| terraform:](bold white) [$workspace]($style) '
+style = "bold red"
+
+[username]
+style_user = "bold white"
+
+[custom.doctl]
+command = "doctl auth list | grep current | awk '{print $1}'"
+format = '[ | doctl:](bold white) [$output]($style)'
+style = "bold red"
+when = "which doctl && doctl auth list | grep current | grep -v default"

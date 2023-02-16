@@ -9,3 +9,7 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # iTerm2
 defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
 defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/projects/dotfiles/iterm"
+
+if ! -f /usr/local/bin/python; then
+  ln -s /usr/local/bin/python3 /usr/local/bin/python
+fi
