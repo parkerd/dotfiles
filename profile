@@ -32,8 +32,8 @@ fi
 
 if which rtx &>/dev/null; then
   test
-elif [[ -f /usr/local/opt/asdf/asdf.sh ]]; then
-  source /usr/local/opt/asdf/asdf.sh
+elif [[ -f /usr/local/opt/asdf/libexec/asdf.sh ]]; then
+  source /usr/local/opt/asdf/libexec/asdf.sh
 fi
 
 # dart
