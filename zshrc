@@ -187,6 +187,10 @@ if which kubectl &>/dev/null; then
   source $kubectl_completion_cache
 fi
 
+if [[ -d $HOME/.krew/bin ]]; then
+  export PATH="${PATH}:${HOME}/.krew/bin"
+fi
+
 # minikube
 #if which minikube &>/dev/null; then
   #local minikube_completion_cache=/tmp/zsh-completion-minikube
