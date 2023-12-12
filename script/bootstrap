@@ -69,7 +69,17 @@ asdf_plugin_add() {
   fi
 }
 
+rtx_plugin_add() {
+  local plugin=$1
+  local exists=$(rtx plugin ls | grep -c $plugin)
+  if [[ $exists -eq 0 ]]; then
+    rtx plugin install $plugin
+  fi
+}
+
 # main
+mkdir -p ~/.config
+
 if [[ -d $dotfiles ]]; then
   cd $dotfiles
 
@@ -93,15 +103,15 @@ fi
 
 if which brew &>/dev/null; then
   # asdf
-  log "Checking asdf"
-  if which asdf &>/dev/null; then
-    for plugin in elixir nodejs python; do
-      asdf_plugin_add $plugin
-    done
-    ok
-  else
-    warn "Not installed"
-  fi
+  #log "Checking asdf"
+  #if which asdf &>/dev/null; then
+  #  for plugin in elixir nodejs python; do
+  #    asdf_plugin_add $plugin
+  #  done
+  #  ok
+  #else
+  #  warn "Not installed"
+  #fi
 
   # fzf
   log "Checking fzf"
@@ -109,6 +119,16 @@ if which brew &>/dev/null; then
     if [[ ! -f ~/.fzf.zsh ]]; then
       $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc
     fi
+    ok
+  else
+    warn "Not installed"
+  fi
+
+  log "Checking rtx"
+  if which rtx &>/dev/null; then
+    for plugin in terraform; do
+      rtx_plugin_add $plugin
+    done
     ok
   else
     warn "Not installed"

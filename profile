@@ -32,9 +32,15 @@ fi
 
 if which rtx &>/dev/null; then
   test
-elif [[ -f /usr/local/opt/asdf/libexec/asdf.sh ]]; then
-  source /usr/local/opt/asdf/libexec/asdf.sh
+elif [[ -f $BREW_PREFIX/opt/asdf/libexec/asdf.sh ]]; then
+  source $BREW_PREFIX/opt/asdf/libexec/asdf.sh
 fi
+
+# brew
+if [[ -d /opt/homebrew/bin ]]; then
+  export PATH=/opt/homebrew/bin:$PATH
+fi
+export BREW_PREFIX=$(brew --prefix)
 
 # dart
 if [[ -d /usr/lib/dart/bin ]]; then
@@ -143,8 +149,8 @@ if which colordiff &> /dev/null; then
 fi
 
 # go
-if [[ -d /usr/local/go ]]; then
-  export PATH=/usr/local/go/bin:$PATH
+if [[ -d $BREW_PREFIX/go ]]; then
+  export PATH=$BREW_PREFIX/go/bin:$PATH
 fi
 if which go &> /dev/null; then
   export GOPATH=$(go env GOPATH)
@@ -181,7 +187,7 @@ if [[ -d "$HOME/.rd" ]]; then
   export PATH=$HOME/.rd/bin:$PATH
   export KUBECTL_PATH=$HOME/.rd/bin/kubectl
 else
-  export KUBECTL_PATH=/usr/local/bin/kubectl
+  export KUBECTL_PATH=$BREW_PREFIX/bin/kubectl
 fi
 
 # nvm
@@ -210,8 +216,8 @@ fi
 #fi
 
 # scala
-if [[ -d "/usr/local/opt/scala210/bin" ]]; then
-  export PATH=/usr/local/opt/scala210/bin:$PATH
+if [[ -d "$BREW_PREFIX/opt/scala210/bin" ]]; then
+  export PATH=$BREW_PREFIX/opt/scala210/bin:$PATH
 fi
 
 # rust
@@ -288,9 +294,9 @@ alias path="echo \$PATH | tr ':' '\n'"
 alias pti=ptipython
 alias pvm=pyenv
 alias r='clear && rake'
-alias redis='redis-server /usr/local/etc/redis.conf'
+alias redis='redis-server $BREW_PREFIX/etc/redis.conf'
 alias shfix='shfmt -i 2 -ci -bn -w .'
-alias stern='/usr/local/bin/stern "--context=${KUBECTL_CONTEXT:-$('$KUBECTL_PATH' config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
+alias stern='$BREW_PREFIX/bin/stern "--context=${KUBECTL_CONTEXT:-$('$KUBECTL_PATH' config current-context)}" ${KUBECTL_NAMESPACE/[[:alnum:]-]*/--namespace=${KUBECTL_NAMESPACE}}'
 alias sum='paste -sd+ - | bc'
 alias t='clear && rspec'
 alias tf=terraform

@@ -196,6 +196,12 @@ fi
   #source $minikube_completion_cache
 #fi
 
+# project_prompt
+if which __pp_workon &>/dev/null; then
+  compdef __pp_zsh __pp_workon
+  compdef _cd __pp_cd
+fi
+
 # rustup
 #if which rustup &>/dev/null; then
   #local rustup_completion_cache=/tmp/zsh-completion-rustup
@@ -209,6 +215,7 @@ fi
 if which rtx &> /dev/null; then
   export RTX_QUIET=1
   eval "$(rtx activate zsh)"
+  eval "$(rtx completion zsh)"
 fi
 
 # starship

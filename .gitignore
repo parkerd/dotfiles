@@ -1,5 +1,7 @@
-vim/.netrwhist
-vim/bundle/*
-!vim/bundle/NeoBundle.lock
+Brewfile.lock.json
+config/karabiner/automatic_backups
 ipython/profile_default
 ptpython/history
+vim/bundle/*
+vim/.netrwhist
+!vim/bundle/NeoBundle.lock
