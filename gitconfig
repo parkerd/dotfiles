@@ -63,8 +63,8 @@ path = ~/.gitconfig-dayjob
 [init]
 defaultBranch = main
 
-[diff]
-external = difft
+#[diff]
+#external = difft
 
 [difftool "sourcetree"]
 cmd = opendiff \"$LOCAL\" \"$REMOTE\"

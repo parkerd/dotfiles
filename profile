@@ -243,6 +243,7 @@ alias b=bundle
 alias be='bundle exec'
 alias blog=hugo
 alias c=clear
+alias co=confluent
 #alias code='PYENV_VERSION=$(pyenv version-name) VSCODE=1 code'
 alias d=docker
 alias dco=docker-compose
