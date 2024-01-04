@@ -30,12 +30,6 @@ if [[ -d "$HOME/.local/bin" ]]; then
   export PATH=$HOME/.local/bin:$PATH
 fi
 
-if which rtx &>/dev/null; then
-  test
-elif [[ -f $BREW_PREFIX/opt/asdf/libexec/asdf.sh ]]; then
-  source $BREW_PREFIX/opt/asdf/libexec/asdf.sh
-fi
-
 # brew
 if [[ -d /opt/homebrew/bin ]]; then
   export PATH=/opt/homebrew/bin:$PATH

@@ -200,6 +200,14 @@ fi
   #source $minikube_completion_cache
 #fi
 
+# mise
+if which mise &> /dev/null; then
+  export MISE_QUIET=1
+  eval "$(mise activate zsh)"
+  eval "$(mise completion zsh)"
+  alias rtx=mise
+fi
+
 # project_prompt
 if which __pp_workon &>/dev/null; then
   compdef __pp_zsh __pp_workon
@@ -214,13 +222,6 @@ fi
   #fi
   #source $rustup_completion_cache
 #fi
-
-# rtx
-if which rtx &> /dev/null; then
-  export RTX_QUIET=1
-  eval "$(rtx activate zsh)"
-  eval "$(rtx completion zsh)"
-fi
 
 # starship
 if which starship &> /dev/null; then

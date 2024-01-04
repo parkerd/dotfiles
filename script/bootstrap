@@ -69,11 +69,11 @@ asdf_plugin_add() {
   fi
 }
 
-rtx_plugin_add() {
+mise_plugin_add() {
   local plugin=$1
-  local exists=$(rtx plugin ls | grep -c $plugin)
+  local exists=$(mise plugin ls | grep -c $plugin)
   if [[ $exists -eq 0 ]]; then
-    rtx plugin install $plugin
+    mise plugin install $plugin
   fi
 }
 
@@ -124,10 +124,10 @@ if which brew &>/dev/null; then
     warn "Not installed"
   fi
 
-  log "Checking rtx"
-  if which rtx &>/dev/null; then
+  log "Checking mise"
+  if which mise &>/dev/null; then
     for plugin in terraform; do
-      rtx_plugin_add $plugin
+      mise_plugin_add $plugin
     done
     ok
   else
