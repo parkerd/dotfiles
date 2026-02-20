@@ -240,7 +240,7 @@ alias c=clear
 alias co=confluent
 #alias code='PYENV_VERSION=$(pyenv version-name) VSCODE=1 code'
 alias d=docker
-alias dco=docker-compose
+alias dco="docker compose"
 alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias ex=exercism
 alias g=gcloud
@@ -943,39 +943,11 @@ ksecret() {
   fi
 }
 
-pocket() {
-  #
-  # Interact with Pocket.
-  #
-  local pocket_index=~/.pocket-index
-
-  if ! which pocket-cli &>/dev/null; then
-    echo "error: requires pocket-cli"
-    exit 1
-  fi
-
-  if [[ ! -f $pocket_index ]]; then
-    pocket-cli fetch
-  fi
-
-  case $1 in
-    fetch)
-      pocket-cli fetch
-      ;;
-    list)
-      LC_ALL=C sort -k3 -t, -n $pocket_index | awk -F, '{print "\033[1;34m"$5"\033[0m\n  "$1}'
-      ;;
-    search)
-      if [[ -z $2 ]]; then
-        echo "usage: $0 search <query>"
-      fi
-      grep -i $2 $pocket_index \
-        | LC_ALL=C sort -k3 -t, -n | awk -F, '{print "\033[1;34m"$5"\033[0m\n  "$1}'
-      ;;
-    *)
-      echo "usage: $0 <fetch|list|search>"
-      ;;
-  esac
+certs() {
+  site=$1
+  echo "Q" \
+    | openssl s_client -connect ${site}:443 -showcerts \
+    | openssl x509 -noout -dates
 }
 
 aws-env() {

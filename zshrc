@@ -128,7 +128,10 @@ debug_timing 'zshrc done'
 debug_timing 'completion start'
 
 # autocomplete
-fpath=(/usr/local/share/zsh-completions $fpath)
+#fpath=($(brew/usr/local/share/zsh-completions $fpath)
+if which brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
 autoload compinit && compinit -i
 zstyle ':completion:*' menu select
 
@@ -201,7 +204,7 @@ fi
 #fi
 
 # mise
-if which mise &> /dev/null; then
+if which mise &>/dev/null; then
   export MISE_QUIET=1
   eval "$(mise activate zsh)"
   eval "$(mise completion zsh)"
@@ -224,12 +227,12 @@ fi
 #fi
 
 # starship
-if which starship &> /dev/null; then
+if which starship &>/dev/null; then
   eval "$(starship init zsh)"
 fi
 
 # stern
-if which stern &> /dev/null; then
+if which stern &>/dev/null; then
   source <(stern --completion=zsh)
 fi
 

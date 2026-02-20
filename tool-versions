@@ -1,5 +1,6 @@
-elixir system
-erlang system
-nodejs system
-python system
-yarn   system
+elixir    system
+erlang    system
+nodejs    system
+python    system
+terraform 1.11.2
+yarn      system
